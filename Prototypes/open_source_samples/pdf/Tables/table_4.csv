@@ -1,0 +1,7 @@
+,"forward. We find that path is still promising and in a zero-shot setting GPT-3 achieves 76% on LAMBADA, a gain of"
+0,8% over the previous state of the art.
+1,LAMBADA is also a demonstration of the flexibility of few-shot learning as it provides a way to address a problem that
+2,"classically occurs with this dataset. Although the completion in LAMBADA is always the last word in a sentence, a"
+3,standard language model has no way of knowing this detail. It thus assigns probability not only to the correct ending but
+4,also to other valid continuations of the paragraph. This problem has been partially addressed in the past with stop-word
+5,filters [RWC+19] (which ban continuation words). The few-shot setting instead allows us to frame the task as a

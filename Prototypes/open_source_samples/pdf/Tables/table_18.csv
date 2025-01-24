@@ -1,0 +1,5 @@
+,Unnamed: 0,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Average
+0,,Participants,Participants,Genders,Mean,Word Count
+1,Model,Recruited,Excluded,(m:f:other),Age,(human:model)
+2,Control,79,17,32:37:0,39,569:464
+3,GPT-3 175B,81,19,32:30:0,40,569:498
