@@ -1,10 +1,13 @@
 import boto3
 from botocore.exceptions import NoCredentialsError, ClientError
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 # AWS Credentials
-AWS_ACCESS_KEY_ID = ""
-AWS_SECRET_ACCESS_KEY = "5op8KKQbablNMcIk21/D3vzv6RkR4jrwHXIFLwXD"
-BUCKET_NAME = "pdfparserdataset"
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+BUCKET_NAME = os.getenv("BUCKET_NAME")
 
 def list_objects_in_bucket():
     """List all objects in the S3 bucket."""
