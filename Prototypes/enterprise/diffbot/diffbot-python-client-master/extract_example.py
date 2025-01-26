@@ -6,14 +6,14 @@ import time
 print("Calling article API endpoint with fields specified on the url: https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population...\n")
 diffbot = DiffbotClient()
 token = API_TOKEN
-url = "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population"
+url = "https://medium.com/@shreyajaiswal1604/insights-into-global-health-analyzing-and-predicting-life-expectancy-with-who-dataset-3eef61f8dc4c"
 api = "article"
-response = diffbot.request(url, token, api, fields=['title', 'type'])
+response = diffbot.request(url, token, api, fields=['title', 'type','text','humanLanguage','numPages','nextPages','siteName','publisherRegion','pageUrl','tags','sentiment'])
 print("\nPrinting response:\n")
 pp = pprint.PrettyPrinter(indent=4)
 print(pp.pprint(response))
 # Save response to a file
-with open('response.json', 'w') as file:
+with open('response_updated_v2.json', 'w',encoding='utf-8') as file:
     file.write(pp.pformat(response))
 
 # print()
