@@ -1,13 +1,8 @@
-from fastapi import FastAPI
-
 from fastapi import FastAPI, UploadFile, Form
 from pydantic import BaseModel
 import requests
 from bs4 import BeautifulSoup
-# import pdfplumber
 import boto3
-# import markdown
-import os
 from features.web_extraction.datascraper import WikiSpider, scrape_url 
 
 app = FastAPI()
