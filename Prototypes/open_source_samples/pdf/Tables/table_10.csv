@@ -1,0 +1,7 @@
+,,Anagrams of all but first and last characters (A1)  The model is given a word where every letter except
+0,,"the first and last have been scrambled randomly, and must output the original word. Example: criroptuon ="
+1,,corruption.
+2,,Anagrams of all but first and last 2 characters (A2)  The model is given a word where every letter except
+3,,"the first 2 and last 2 have been scrambled randomly, and must recover the original word. Example: opoepnnt"
+4,,? opponent.
+5,,Random insertion in word (RI)  A random punctuation or space character is inserted between each letter

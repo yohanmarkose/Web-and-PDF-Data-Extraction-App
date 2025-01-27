@@ -1,0 +1,12 @@
+,Unnamed: 0,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Average
+0,,Participants,Participants,Genders,Mean,Word Count
+1,Model,Recruited,Excluded,(m:f:other),Age,(human:model)
+2,Control,76,7,32:37:0,39,216:216
+3,GPT-3 Small,80,7,41:31:1,40,216:188
+4,GPT-3 Medium,80,7,46:28:2,39,216:202
+5,GPT-3 Large,81,24,46:28:2,37,216:200
+6,GPT-3 XL,79,14,32:32:1,38,216:199
+7,GPT-3 2.7B,80,11,36:33:0,40,216:202
+8,GPT-3 6.7B,76,5,46:28:2,37,216:195
+9,GPT-3 13.0B,81,13,46:28:2,37,216:209
+10,GPT-3 175B,80,9,42:29:0,37,216:216

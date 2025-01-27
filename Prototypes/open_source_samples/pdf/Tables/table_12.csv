@@ -1,0 +1,11 @@
+,Unnamed: 0,Unnamed: 1,95% Confidence,t compared to,I dont know
+0,,Mean accuracy,"Interval (low, hi)",control (p-value),assignments
+1,Control (deliberately bad model),86%,83%90%,-,3.6 %
+2,GPT-3 Small,76%,72%80%,3.9 (2e-4),4.9%
+3,GPT-3 Medium,61%,58%65%,10.3 (7e-21),6.0%
+4,GPT-3 Large,68%,64%72%,7.3 (3e-11),8.7%
+5,GPT-3 XL,62%,59%65%,10.7 (1e-19),7.5%
+6,GPT-3 2.7B,62%,58%65%,10.4 (5e-19),7.1%
+7,GPT-3 6.7B,60%,56%63%,11.2 (3e-21),6.2%
+8,GPT-3 13B,55%,52%58%,15.3 (1e-32),7.1%
+9,GPT-3 175B,52%,49%54%,16.9 (1e-34),7.8%
