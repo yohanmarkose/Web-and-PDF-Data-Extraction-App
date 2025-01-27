@@ -1,0 +1,10 @@
+,Unnamed: 0,Quantity Weight in,Epochs elapsed when
+0,Dataset,(tokens) training mix,training for 300B tokens
+1,Common Crawl (filtered),410 billion 60%,0.44
+2,WebText2,19 billion 22%,2.9
+3,Books1,12 billion 8%,1.9
+4,Books2,55 billion 8%,0.43
+5,Wikipedia,3 billion 3%,3.4
+6,Table 2.2: Datasets used to train GPT-3. Weight in training mix refers to the fraction of examples during training,,
+7,"that are drawn from a given dataset, which we intentionally do not make proportional to the size of the dataset. As a",,
+8,"result, when we train for 300 billion tokens, some datasets are seen up to 3.4 times during training while other datasets",,

@@ -1,0 +1,9 @@
+,"takes a step towards test-time sample efficiency closer to that of humans (one-shot or zero-shot), it still sees much more"
+0,text during pre-training than a human sees in the their lifetime [Lin20]. Improving pre-training sample efficiency is
+1,"an important direction for future work, and might come from grounding in the physical world to provide additional"
+2,"information, or from algorithmic improvements."
+3,"A limitation, or at least uncertainty, associated with few-shot learning in GPT-3 is ambiguity about whether few-shot"
+4,"learning actually learns new tasks from scratch at inference time, or if it simply recognizes and identifies tasks that it"
+5,"has learned during training. These possibilities exist on a spectrum, ranging from demonstrations in the training set that"
+6,"are drawn from exactly the same distribution as those at test time, to recognizing the same task but in a different format,"
+7,"to adapting to a specific style of a general task such as QA, to learning a skill entirely de novo. Where GPT-3 is on"
