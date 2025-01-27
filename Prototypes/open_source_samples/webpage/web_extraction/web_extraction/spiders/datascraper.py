@@ -7,7 +7,7 @@ class WikiSpider(scrapy.Spider):
     name = "datascraper"
 
     def start_requests(self):
-        urls = ["https://en.wikipedia.org/wiki/Automotive_industry_in_China", "https://en.wikipedia.org/wiki/Large_language_model"]
+        urls = ["https://en.wikipedia.org/wiki/Automotive_industry_in_China"]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
