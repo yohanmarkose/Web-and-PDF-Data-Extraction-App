@@ -1,6 +1,8 @@
 import streamlit as st
 import requests
 
+API_URL = "http://127.0.0.1:8000"
+
 def main():
     # Set the title of the app
     st.title("Document to Markdown Conversion")
@@ -53,7 +55,19 @@ def check_url(url):
 def convert_web_to_markdown(tool, text_url):    
     if tool == "Open Source - Scrapy":
         #do something
-        st.write(tool, text_url)
+        response = requests.post(f"{API_URL}/scrape-url", json={"url": text_url})
+        if response.status_code == 200:
+            # Extract the response data
+            data = response.json()
+            st.success(data["message"])
+            
+            # Display the scraped content
+            st.subheader("Scraped Content")
+            st.text_area("Content", data["scraped_content"], height=300)  # Show the scraped text
+        else:
+            st.error("An error occurred while scraping the URL.")
+
+        # st.write(tool, text_url)
     elif tool == "Enterprise - Diffbot":
         #do something
         st.write(tool, text_url)
