@@ -1,6 +1,8 @@
 import streamlit as st
 import requests
 
+FASTAPI_URL = "http://localhost:8000"  # Update with your FastAPI server URL
+
 def main():
     # Set the title of the app
     st.title("Document to Markdown Conversion")
@@ -81,8 +83,6 @@ def convert_PDF_to_markdown(tool, file_upload):
     file_content = file_upload.read()
     st.info(f"File content loaded. Size: {len(file_content)} bytes.")
     
-    
-    
 def show_home_page():
     st.header("Welcome to the Home Page")
     st.write("This is a basic Streamlit app. Use the sidebar to navigate between pages.")
@@ -110,6 +110,10 @@ def show_contact_page():
         if submitted:
             st.success("Thank you for your message!")
             st.write("We'll get back to you soon.")
+
+def process_url(url):
+    response = requests.post(f"{FASTAPI_URL}/process-url", json={"url": url})
+    return response.json()
 
 if __name__ == "__main__":
 # Set page configuration
