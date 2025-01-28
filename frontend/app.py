@@ -6,7 +6,7 @@ def main():
     st.title("Document to Markdown Conversion")
 
     # Add a sidebar
-    st.sidebar.header("Navigation")
+    st.sidebar.header("Main Menu")
     input_format = st.sidebar.selectbox("Choose a format:", ["WebURL", "PDF"])
     
     if input_format == "WebURL":
@@ -16,7 +16,7 @@ def main():
         convert = st.button("Convert", use_container_width=True)
     elif input_format == "PDF":
         tool = st.sidebar.selectbox("Choose a method to convert PDF:", 
-                                    ["Open Source - PyMuPDF", "Enterprise - Diffbot", "Docling"])
+                                    ["Open Source - PyMuPDF", "Enterprise - Azure Document Intelligence", "Docling"])
         #st.sidebar.file_uploader("Choose a PDF File", type="pdf", accept_multiple_files=False, key="abc")
         file_upload = st.file_uploader("Choose a PDF File", type="pdf", accept_multiple_files=False)
         convert = st.button("Convert", use_container_width=True)
@@ -65,7 +65,7 @@ def convert_PDF_to_markdown(tool, file_upload):
     if tool == "Open Source - PyMuPDF":
         #do something
         st.write(tool)
-    elif tool == "Enterprise - Diffbot":
+    elif tool == "Enterprise - Azure Document Intelligence":
         #do something
         st.write(tool)
     elif tool == "Docling":

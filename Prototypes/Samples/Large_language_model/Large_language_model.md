@@ -162,7 +162,7 @@
 | Reinforcement learning Q-learning SARSA Temporal difference (TD) Multi-agent Self-play                                                                                                                                                                                                                                                                                   |
 | Learning with humans Active learning Crowdsourcing Human-in-the-loop RLHF                                                                                                                                                                                                                                                                                                |
 | Model diagnostics Coefficient of determination Confusion matrix Learning curve ROC curve                                                                                                                                                                                                                                                                                 |
-| Mathematical foundations Kernel machines Bias–variance tradeoff Computational learning theory Empirical risk minimization Occam learning PAC learning Statistical learning VC theory                                                                                                                                                                                     |
+| Mathematical foundations Kernel machines Bias–variance tradeoff Computational learning theory Empirical risk minimization Occam learning PAC learning Statistical learning VC theory Topological deep learning                                                                                                                                                           |
 | Journals and conferences ECML PKDD NeurIPS ICML ICLR IJCAI ML JMLR                                                                                                                                                                                                                                                                                                       |
 | Related articles Glossary of artificial intelligence List of datasets for machine-learning research List of datasets in computer vision and image processing Outline of machine learning                                                                                                                                                                                 |
 | vte                                                                                                                                                                                                                                                                                                                                                                      |
@@ -189,14 +189,13 @@ An illustration of main components of the transformer model from the original pa
 
 <!-- image -->
 
-At the 2017 NeurIPS conference, Google researchers introduced the transformer architecture in their landmark paper "Attention Is All You Need". This paper's goal was to improve upon 2014 seq2seq technology,[10] and was based mainly on the attention mechanism developed by Bahdanau et al. in 2014.[11] The following year in 2018, BERT was introduced and quickly became "ubiquitous".[12] Though the original transformer has both encoder and decoder blocks, BERT is an encoder-only model. 
-Academic and research usage of BERT began to decline in 2023, following rapid improvements in the abilities of decoder-only models (such as GPT) to solve tasks via prompting.[13]
+At the 2017 NeurIPS conference, Google researchers introduced the transformer architecture in their landmark paper "Attention Is All You Need". This paper's goal was to improve upon 2014 seq2seq technology,[10] and was based mainly on the attention mechanism developed by Bahdanau et al. in 2014.[11] The following year in 2018, BERT was introduced and quickly became "ubiquitous".[12] Though the original transformer has both encoder and decoder blocks, BERT is an encoder-only model. Academic and research usage of BERT began to decline in 2023, following rapid improvements in the abilities of decoder-only models (such as GPT) to solve tasks via prompting.[13]
 
 Although decoder-only GPT-1 was introduced in 2018, it was GPT-2 in 2019 that caught widespread attention because OpenAI at first deemed it too powerful to release publicly, out of fear of malicious use.[14] GPT-3 in 2020 went a step further and as of 2024[update] is available only via API with no offering of downloading the model to execute locally. But it was the 2022 consumer-facing browser-based ChatGPT that captured the imaginations of the general population and caused some media hype and online buzz.[15] The 2023 GPT-4 was praised for its increased accuracy and as a "holy grail" for its multimodal capabilities.[16] OpenAI did not reveal the high-level architecture and the number of parameters of GPT-4. The release of ChatGPT led to an uptick in LLM usage across several research subfields of computer science, including robotics, software engineering, and societal impact work.[17] In 2024 OpenAI released the reasoning model OpenAI o1, which generates long chains of thought before returning a final answer.
 
 Competing language models have for the most part been attempting to equal the GPT series, at least in terms of number of parameters.[18]
 
-Since 2022, source-available models have been gaining popularity, especially at first with BLOOM and LLaMA, though both have restrictions on the field of use. Mistral AI's models Mistral 7B and Mixtral 8x7b have the more permissive Apache License. As of January 2025[update], The reasoning model Deepseek R1 a 671 billion parameter model is the most powerful open LLM according to the LMSYS Chatbot Arena Leaderboard, being more powerful than GPT-4o but not as powerful as OpenAI o1.[19]
+Since 2022, source-available models have been gaining popularity, especially at first with BLOOM and LLaMA, though both have restrictions on the field of use. Mistral AI's models Mistral 7B and Mixtral 8x7b have the more permissive Apache License. In January 2025, DeepSeek released DeepSeek R1, a 671-billion-parameter open-weight model that performs comparably to OpenAI o1 but at a much lower cost.[19]
 
 Since 2023, many LLMs have been trained to be multimodal, having the ability to also process or generate other types of data, such as images or audio. These LLMs are also called large multimodal models (LMMs).[20]
 
@@ -218,7 +217,7 @@ As an example, consider a tokenizer based on byte-pair encoding. In the first st
 
 #### Problems
 
-A token vocabulary based on the frequencies extracted from mainly English corpora uses as few tokens as possible for an average English word. An average word in another language encoded by such an English-optimized tokenizer is however split into suboptimal amount of tokens. GPT-2 tokenizer can use up to 15 times more tokens per word for some languages, for example for the Shan language from Myanmar. Even more widespread languages such as Portuguese and German have "a premium of 50%" compared to English.[29]
+A token vocabulary based on the frequencies extracted from mainly English corpora uses as few tokens as possible for an average English word. However, an average word in another language encoded by such an English-optimized tokenizer is split into a suboptimal amount of tokens. GPT-2 tokenizer can use up to 15 times more tokens per word for some languages, for example for the Shan language from Myanmar. Even more widespread languages such as Portuguese and German have "a premium of 50%" compared to English.[29]
 
 Greedy tokenization also causes subtle problems with text completion.[30]
 
@@ -260,11 +259,11 @@ The largest models, such as Google's Gemini 1.5, presented in February 2024, can
 
 Length of a conversation that the model can take into account when generating its next answer is limited by the size of a context window, as well. If the length of a conversation, for example with ChatGPT, is longer than its context window, only the parts inside the context window are taken into account when generating the next answer, or the model needs to apply some algorithm to summarize the too distant parts of conversation.
 
-The shortcomings of making a context window larger include higher computational cost and possibly diluting the focus on local context, while making it smaller can cause a model to miss an important long-range dependency. Balancing them are a matter of experimentation and domain-specific considerations.
+The shortcomings of making a context window larger include higher computational cost and possibly diluting the focus on local context, while making it smaller can cause a model to miss an important long-range dependency. Balancing them is a matter of experimentation and domain-specific considerations.
 
 A model may be pre-trained either to predict how the segment continues, or what is missing in the segment, given a segment from its training dataset.[48] It can be either
 
-- autoregressive (i.e. predicting how the segment continues, the way GPTs do it): for example given a segment "I like to eat", the model predicts "ice cream", or "sushi".
+- autoregressive (i.e. predicting how the segment continues, as GPTs do): for example given a segment "I like to eat", the model predicts "ice cream", or "sushi".
 - "masked" (i.e. filling in the parts missing from the segment, the way "BERT"[49] does it): for example, given a segment "I like to [\_\_] [\_\_] cream", the model predicts that "eat" and "ice" are missing.
 
 Models may be trained on auxiliary tasks which test their understanding of the data distribution, such as Next Sentence Prediction (NSP), in which pairs of sentences are presented and the model must predict whether they appear consecutively in the training corpus.[49] During training, regularization loss is also used to stabilize training. However regularization loss is usually not used during testing and evaluation.
@@ -311,7 +310,7 @@ LLM-powered agents can keep a long-term memory of its previous contexts, and the
 
 Typically, LLMs are trained with single- or half-precision floating point numbers (float32 and float16). One float16 has 16 bits, or 2 bytes, and so one billion parameters require 2 gigabytes. The largest models typically have 100 billion parameters, requiring 200 gigabytes to load, which places them outside the range of most consumer electronics.[73]
 
-Post-training quantization[74] aims to decrease the space requirement by lowering precision of the parameters of a trained model, while preserving most of its performance.[75][76] The simplest form of quantization simply truncates all numbers to a given number of bits. It can be improved by using a different quantization codebook per layer. Further improvement can be done by applying different precisions to different parameters, with higher precision for particularly important parameters ("outlier weights").[77] See [78] for a visual guide.
+Post-training quantization[74] aims to decrease the space requirement by lowering precision of the parameters of a trained model, while preserving most of its performance.[75][76] The simplest form of quantization simply truncates all numbers to a given number of bits. It can be improved by using a different quantization codebook per layer. Further improvement can be done by applying different precisions to different parameters, with higher precision for particularly important parameters ("outlier weights").[77] See the visual guide to quantization by Maarten Grootendorst[78] for a visual depiction.
 
 While quantized models are typically frozen, and only pre-quantized models are fine-tuned, quantized models can still be fine-tuned.[79]
 
@@ -495,7 +494,12 @@ Furthermore, recent research has demonstrated that AI systems, including large l
 
 The most intriguing among emergent abilities is in-context learning from example demonstrations.[97] In-context learning is involved in tasks, such as:
 
-- reported arithmetics, decoding the International Phonetic Alphabet, unscrambling a word's letters, disambiguate word in context,[42][98][99] converting spatial words, cardinal directions (for example, replying "northeast" upon [0, 0, 1; 0, 0, 0; 0, 0, 0]), color terms represented in text.[100]
+- reported arithmetics
+- decoding the International Phonetic Alphabet
+- unscrambling a word's letters
+- disambiguating word-in-context datasets[42][98][99]
+- converting spatial words
+- cardinal directions (for example, replying "northeast" in response to a 3x3 grid of 8 zeros and a 1 in the top-right), color terms represented in text.[100]
 - chain-of-thought prompting: Model outputs are improved by chain-of-thought prompting only when model size exceeds 62B. Smaller models perform better when prompted to answer immediately, without chain of thought.[101]
 - identifying offensive content in paragraphs of Hinglish (a combination of Hindi and English), and generating a similar English equivalent of Kiswahili proverbs.[102]
 
@@ -619,7 +623,7 @@ In another example, the authors trained small transformers on modular arithmetic
 
 NLP researchers were evenly split when asked, in a 2022 survey, whether (untuned) LLMs "could (ever) understand natural language in some nontrivial sense".[108] Proponents of "LLM understanding" believe that some LLM abilities, such as mathematical reasoning, imply an ability to "understand" certain concepts. A Microsoft team argued in 2023 that GPT-4 "can solve novel and difficult tasks that span mathematics, coding, vision, medicine, law, psychology and more" and that GPT-4 "could reasonably be viewed as an early (yet still incomplete) version of an artificial general intelligence system": "Can one reasonably say that a system that passes exams for software engineering candidates is not really intelligent?"[109][110] Ilya Sutskever argues that predicting the next word sometimes involves reasoning and deep insights, for example if the LLM has to predict the name of the criminal in an unknown detective novel after processing the entire story leading up to the revelation.[111] Some researchers characterize LLMs as "alien intelligence".[112][113] For example, Conjecture CEO Connor Leahy considers untuned LLMs to be like inscrutable alien "Shoggoths", and believes that RLHF tuning creates a "smiling facade" obscuring the inner workings of the LLM: "If you don't push it too far, the smiley face stays on. But then you give it [an unexpected] prompt, and suddenly you see this massive underbelly of insanity, of weird thought processes and clearly non-human understanding."[114][115]
 
-In contrast, some proponents of the "LLMs lack understanding" school believe that existing LLMs are "simply remixing and recombining existing writing",[113] a phenomenon known as stochastic parrot, or they point to the deficits existing LLMs continue to have in prediction skills, reasoning skills, agency, and explainability.[108] For example, GPT-4 has natural deficits in planning and in real-time learning.[110] Generative LLMs have been observed to confidently assert claims of fact which do not seem to be justified by their training data, a phenomenon which has been termed "hallucination".[116] Specifically, hallucinations in the context of LLMs correspond to the generation of text or responses that seem syntactically sound, fluent, and natural but are factually incorrect, nonsensical, or unfaithful to the provided source input.[117] Neuroscientist Terrence Sejnowski has argued that "The diverging opinions of experts on the intelligence of LLMs suggests that our old ideas based on natural intelligence are inadequate".[108]
+In contrast, some skeptics of LLM understanding believe that existing LLMs are "simply remixing and recombining existing writing",[113] a phenomenon known as stochastic parrot, or they point to the deficits existing LLMs continue to have in prediction skills, reasoning skills, agency, and explainability.[108] For example, GPT-4 has natural deficits in planning and in real-time learning.[110] Generative LLMs have been observed to confidently assert claims of fact which do not seem to be justified by their training data, a phenomenon which has been termed "hallucination".[116] Specifically, hallucinations in the context of LLMs correspond to the generation of text or responses that seem syntactically sound, fluent, and natural but are factually incorrect, nonsensical, or unfaithful to the provided source input.[117] Neuroscientist Terrence Sejnowski has argued that "The diverging opinions of experts on the intelligence of LLMs suggests that our old ideas based on natural intelligence are inadequate".[108]
 
 The matter of LLM's exhibiting intelligence or understanding has two main aspects – the first is how to model thought and language in a computer system, and the second is how to enable the computer system to generate human like language.[108] These aspects of language as a model of cognition have been developed in the field of cognitive linguistics. American linguist George Lakoff presented Neural Theory of Language (NTL)[118] as a computational basis for using language as a model of learning tasks and understanding. The NTL Model outlines how specific neural structures of the human brain shape the nature of thought and language and in turn what are the computational properties of such neural systems that can be applied to model thought and language in a computer system. After a framework for modeling language in a computer systems was established, the focus shifted to establishing frameworks for computer systems to generate language with acceptable grammar. In his 2014 book titled The Language Myth: Why Language Is Not An Instinct, British cognitive linguist and digital communication technologist Vyvyan Evans mapped out the role of probabilistic context-free grammar (PCFG) in enabling NLP to model cognitive patterns and generate human like language.[119][120]
 
@@ -830,7 +834,7 @@ Political bias refers to the tendency of algorithms to systematically favor cert
 16. ^ Heaven, Will (March 14, 2023). "GPT-4 is bigger and better than ChatGPT—but OpenAI won't say why". MIT Technology Review. Archived from the original on March 17, 2023. Retrieved January 20, 2024.
 17. ^ Movva, Rajiv; Balachandar, Sidhika; Peng, Kenny; Agostini, Gabriel; Garg, Nikhil; Pierson, Emma (2024). "Topics, Authors, and Institutions in Large Language Model Research: Trends from 17K arXiv Papers". Proceedings of the 2024 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers). pp. 1223–1243. arXiv:2307.10700. doi:10.18653/v1/2024.naacl-long.67. Retrieved 2024-12-08.
 18. ^ "Parameters in notable artificial intelligence systems". ourworldindata.org. November 30, 2023. Retrieved January 20, 2024.
-19. ^ "Chatbot Arena LLM Leaderboard:". lmarena.ai/. Retrieved January 25, 2025.{{cite web}}:  CS1 maint: url-status (link)
+19. ^ Sharma, Shubham (2025-01-20). "Open-source DeepSeek-R1 uses pure reinforcement learning to match OpenAI o1 — at 95% less cost". VentureBeat. Retrieved 2025-01-26.
 20. ^ Zia, Dr Tehseen (2024-01-08). "Unveiling of Large Multimodal Models: Shaping the Landscape of Language Models in 2024". Unite.AI. Retrieved 2024-12-28.
 21. ^ Peng, Bo; et al. (2023). "RWKV: Reinventing RNNS for the Transformer Era". arXiv:2305.13048 [cs.CL].
 22. ^ Merritt, Rick (2022-03-25). "What Is a Transformer Model?". NVIDIA Blog. Archived from the original on 2023-11-17. Retrieved 2023-07-25.
@@ -975,20 +979,18 @@ Kaplan, Jared; McCandlish, Sam; Henighan, Tom; Brown, Tom B.; Chess, Benjamin; C
 - Deep learning
 - Natural language processing
 
-- CS1 maint: url-status
 - CS1: long volume value
 - Webarchive template wayback links
 - Articles with short description
 - Short description is different from Wikidata
 - Articles containing potentially dated statements from 2024
 - All articles containing potentially dated statements
-- Articles containing potentially dated statements from January 2025
 - All accuracy disputes
 - Articles with disputed statements from September 2024
 - All articles with unsourced statements
 - Articles with unsourced statements from February 2024
 
-- This page was last edited on 25 January 2025, at 19:03 (UTC).
+- This page was last edited on 26 January 2025, at 16:02 (UTC).
 - Text is available under the Creative Commons Attribution-ShareAlike 4.0 License;
 additional terms may apply. By using this site, you agree to the Terms of Use and Privacy Policy. Wikipedia® is a registered trademark of the Wikimedia Foundation, Inc., a non-profit organization.
 

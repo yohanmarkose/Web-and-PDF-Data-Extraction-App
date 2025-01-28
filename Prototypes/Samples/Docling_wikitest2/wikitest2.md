@@ -1,6 +1,6 @@
 Figures used in this chart are based on the most up-to-date estimates or projections by the national census authority, where available, and are usually rounded off.
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000000_13b1fda025067f1e4abb4dc5cfe5f5d248b76937a5042eb684d4de7091cd45ff.png)
 
 ## List of countries and dependencies b by population
 
@@ -10,7 +10,7 @@ This is a list of countries and dependencies by population . It includes soverei
 
 Cartogram of the world ' s population in 2018; each square represents 500 , 000 people .
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000001_9a3a3463fa20174ecc818fcafc19b8ffaadba2a4f7206b5405b50798634c29fe.png)
 
 Where updated national data are not available, figures are based on the estimates or projections for 2024 by the Population Division of the United Nations Department of Economic and Social Affairs .
 
@@ -77,9 +77,9 @@ Note: A numbered rank is assigned to the 193 member states of the United Nations
 | 51  | Nepal                            | 29 , 164 , 578             | 0 . 4%              | 25 Nov 2021                         | 2021 census result[60]                                          |         |
 | 52  | Cameroon                         | 28 , 758 , 503             | 0 . 4%              | 1 Jul 2024                          | National annual projection[ 61]                                 |         |
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000002_44ee7f1c6443b4facafb291760125c63c44d7785254b030581eb1a794c8a52f3.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000003_a00e5fb70b9e6844cbf825edcf486953db57506c0ff7474e6692de8680598780.png)
 
 |        | Location             | Population                 | % of  world    | Date                    | Source (official or fr the United Nations)   | Notes   |
 |--------|----------------------|----------------------------|----------------|-------------------------|----------------------------------------------|---------|
@@ -138,31 +138,31 @@ Note: A numbered rank is assigned to the 193 member states of the United Nations
 | 103    | Libya                | 7 , 381 , 023              | 0 . 09%        | 1 Jul 2024              | UN projection[ 114]                          |         |
 | 104    | Kyrgyzstan           | 7 , 161 , 900              | 0 . 09%        | 1 Jan 2024              | Monthly national estimate[ 115]              |         |
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000004_60f7df870cad4c59b1106ea5eaec06cde98be9ec21d00aff8938a77b0342c442.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000005_64f88e6527557446ef7358a57a067c8cfe34eff58511406895ff5aa0b3923868.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000006_a511e2a2584103a6d5c1ca8a9680d48850033a1e6e2c0d1b8b748d6e7649d5c4.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000007_723b5a5ad74773fa4c5b46ea623c4a1680839b3f4bcb6b7b1346f2e38bb9a162.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000008_3752fd993c4fb462a80b1234d53bb01fd97e360e47804d45db6548817ea037ed.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000009_78f328cda6d78531c2e2ab20e19daa7954cde55ad9c84ad3d42b525e881b49d8.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000010_39dddd3e550b60226f48bf6099939827f1d0a535e9621aadadef36b345163db6.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000011_d81ae0e04379137ba16e683a6269c3ee2f00b7fec1fbf852f5d1e9cca9bb2b0e.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000012_2baa9557c69f6aa0fcca36458f455eab573fcbde63c34e1e70249abed265f6c1.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000013_2db95ffd799d17f5c82ee047c051aab37bc0952da099323766b1da189ab6ffee.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000014_ca896c7edccc036b7156ad6b7419aedab453cc7c8cc8a16a304ad6117cce1655.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000015_7dbf33e67b47bb7516db0f7eaf86f67a70aec9b5920c72ed5e1de4e5052727f7.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000016_5abccc14400e9edd87c7202051ca4ca7f2461ce5ac9961bb8a0e8d2672012e11.png)
 
 |          | Location                 | Population                   | % of  world      | Date                     | Source (official or fr the United Nations)               | Notes   |
 |----------|--------------------------|------------------------------|------------------|--------------------------|----------------------------------------------------------|---------|
@@ -221,15 +221,15 @@ Note: A numbered rank is assigned to the 193 member states of the United Nations
 | 155      | Eswatini                 | 1 , 235 , 549                | 0 . 02%          | 1 Jul 2024               | Official projecti [ 169]                                 |         |
 | 156      | Djibouti                 | 1 , 066 , 809                | 0 . 01%          | 20 May 2024              | 2024 census result[170]                                  |         |
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000017_b309ad75f13d4ce38c4d23afbbcad7c0c79538b41b2fc10881f74528cdc42602.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000018_98bd40de0b494c58798fd6c54586f04109198ad1951d2876f6faae92192a7727.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000019_2d41b9d5b964f704c86ae7eb6474d40009d93d9e0ce808d995323b71e0f87a22.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000020_25f8a62f5098325d03d09a6f58b2286562f9ad32a0dbfb250c006bf2aaaa0a0e.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000021_a8ea0d6b498e43221348fcd97e8c4448959fe433bba6b1d0ccbf93adcf915ce7.png)
 
 |          | Location                                       | Population         | % of  world      | Date                    | Source (official or fr the United Nations)              | Notes   |
 |----------|------------------------------------------------|--------------------|------------------|-------------------------|---------------------------------------------------------|---------|
@@ -288,11 +288,11 @@ Note: A numbered rank is assigned to the 193 member states of the United Nations
 | -        | Northern Mariana Islands (US)                  | 47 , 329           | 0 . 0006%        | 1 Jul 2023  1 Apr 2020  | 2020 census result[222]                                 |         |
 | 188      | Marshall Islands                               | 42 , 418           | 0 . 0005%        | 30 Sep 2021             | 2021 Census[223]                                        |         |
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000022_737fc5cc71224b00c6e40fe80927ef1466570f1a6d5a39de75c555b970ca5a70.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000023_c4518610ffd80f2100189a3fc070330a1ed360310ff4ecdfa6b5160df91f1387.png)
 
-<!-- image -->
+![Image](wikitest2_artifacts/image_000024_203dc7b999e32e12e988c0565f5bb7d8fd3e1156f9a98c2b03bb67727019d4f5.png)
 
 |     | Location                                            | Population   | % of  world   | Date        | Source (official or fr the United Nations)   | Notes   |
 |-----|-----------------------------------------------------|--------------|---------------|-------------|----------------------------------------------|---------|
