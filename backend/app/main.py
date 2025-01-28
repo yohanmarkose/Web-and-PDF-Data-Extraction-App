@@ -1,6 +1,6 @@
 from fastapi import FastAPI, UploadFile, Form
 from mistune import markdown
-from parsers.web_extraction.datascraper import WikiSpider, scrape_url
+from features.web_extraction.datascraper import WikiSpider, scrape_url
 from pydantic import BaseModel
 import requests
 import pdfplumber
@@ -17,8 +17,7 @@ s3_client = boto3.client(
     "s3",
     aws_access_key_id=AWS_ACCESS_KEY_ID,
     aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-)
-
+) 
 
 class URLInput(BaseModel):
     url: str

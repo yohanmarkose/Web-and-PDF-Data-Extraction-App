@@ -3,11 +3,51 @@ from config import API_TOKEN
 import pprint
 import time
 
-print("Calling article API endpoint with fields specified on the url: https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population...\n")
+# diffbot = DiffbotClient()
+# diffbot_token = API_TOKEN
+# url = "https://www.amazon.com/Motorenbau-Inflator-Volleyball-Basketball-Inflatables/dp/B0CVTVNV1X"
+# response = diffbot.request(url, diffbot_token, "analyze")
+# # print("\nPrinting response:\n")
+# # pp = pprint.PrettyPrinter(indent=4)
+# # print(pp.pprint(response))
+# if 'type' in response:
+#     response_type = response['type']
+#     print(f"\nType from response: {response_type}")
+#     if response_type == 'article':
+#         response = diffbot.request(url, diffbot_token, "article", fields=['title', 'type','text','humanLanguage','numPages','nextPages','siteName','publisherRegion','pageUrl','tags','sentiment'])
+#         print("\nPrinting response:\n")
+#         pp = pprint.PrettyPrinter(indent=4)
+#         print(pp.pprint(response))
+
+#     elif response_type == 'product':
+#         response = diffbot.request(url, diffbot_token, "product")
+#         print("\nPrinting response:\n")
+#         pp = pprint.PrettyPrinter(indent=4)
+#         print(pp.pprint(response))
+
+#     elif response_type == 'image':
+#         print("\nCalling image API endpoint on the url: http://www.twitter.com/...\n")
+#         response = diffbot.request(url, diffbot_token, "image")
+#         print("\nPrinting response:\n")
+#         pp = pprint.PrettyPrinter(indent=4)
+#         print(pp.pprint(response))
+#     elif response_type == 'classifier':
+#         print("\nCalling classifier API endpoint on the url: http://www.twitter.com/...\n")
+#         response = diffbot.request(url, diffbot_token, "analyze")
+#         print("\nPrinting response:\n")
+#         pp = pprint.PrettyPrinter(indent=4)
+#         print(pp.pprint(response))
+#     else:
+#         print("\nType not found in the response.")
+#         exit(1)
+# else:
+#     print("\nType not found in the response.")
+#     exit(1)
+
 diffbot = DiffbotClient()
 token = API_TOKEN
-url = "https://medium.com/@shreyajaiswal1604/insights-into-global-health-analyzing-and-predicting-life-expectancy-with-who-dataset-3eef61f8dc4c"
-api = "article"
+url = "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population"
+api = "analyze"
 response = diffbot.request(url, token, api, fields=['title', 'type','text','humanLanguage','numPages','nextPages','siteName','publisherRegion','pageUrl','tags','sentiment'])
 print("\nPrinting response:\n")
 pp = pprint.PrettyPrinter(indent=4)
