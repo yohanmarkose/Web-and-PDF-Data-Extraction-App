@@ -1,9 +1,11 @@
 from fastapi import FastAPI, UploadFile, Form
+from mistune import markdown
+from parsers.web_extraction.datascraper import WikiSpider, scrape_url
 from pydantic import BaseModel
 import requests
+import pdfplumber
 from bs4 import BeautifulSoup
 import boto3
-from features.web_extraction.datascraper import WikiSpider, scrape_url 
 
 app = FastAPI()
 
@@ -48,7 +50,6 @@ def process_url(url_input: URLInput):
 #     file_name = f"{file.filename}.md"
 #     # upload_to_s3(file_name, markdown_content)
 #     return {"message": f"File {file_name} saved to S3"}
-
 
 @app.post("/process-pdf")
 async def process_pdf(file: UploadFile):
