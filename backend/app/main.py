@@ -31,13 +31,13 @@ def process_url(url_input: URLInput):
     soup = BeautifulSoup(response.content, "html.parser")
     text = soup.get_text()
     # markdown_content = markdown.markdown(text)
-    # result = scrape_url(url_input.url)  # Scrape the URL
+    result = scrape_url(url_input.url)  # Scrape the URL
     file_name = "scraped_url.md"
-    upload_to_s3(file_name, text)
+    # upload_to_s3(file_name, result)
 
     return {
         "message": f"File {file_name} ",
-        "scraped_content": text  # Include the original scraped content in the response
+        "scraped_content": result  # Include the original scraped content in the response
     }
 
 # @app.post("/process-pdf")
