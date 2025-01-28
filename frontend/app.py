@@ -1,4 +1,5 @@
 import streamlit as st
+
 import requests
 
 API_URL = "http://127.0.0.1:8000"
@@ -76,6 +77,16 @@ def convert_web_to_markdown(tool, text_url):
         st.write(tool, text_url)
         
 def convert_PDF_to_markdown(tool, file_upload):    
+    """
+    Converts a PDF file to markdown format using the specified tool.
+    Parameters:
+    tool (str): The tool to use for conversion. Options are "Open Source - PyMuPDF", 
+                "Enterprise - Azure Document Intelligence", and "Docling".
+    file_upload (UploadedFile): The uploaded PDF file to be converted.
+    Returns:
+    None: The function writes the converted markdown content to the Streamlit app or 
+          displays an error message if the conversion fails.
+    """
     if tool == "Open Source - PyMuPDF":
         #do something
         st.write(tool)
@@ -85,46 +96,27 @@ def convert_PDF_to_markdown(tool, file_upload):
     elif tool == "Docling":
         #do something
         st.write(tool)
+        files = {"file": (file_upload.name, file_upload, "application/pdf")}
+        try:
+            response = requests.post(f"{API_URL}/pdf-docling-converter/", files=files)
+            if response.status_code == 200:
+                markdown_content = response.content.decode("utf-8")
+                st.markdown(markdown_content, unsafe_allow_html=True)
+                #st.image("frontend/image_000000_14e8639765cfcd90772eadfed24731a6c0e9968efcceae2529d5ee8ad3cf6f26.png")
+            else:
+                st.error(f"Error: {response.status_code} - {response.text}")
+        except requests.exceptions.RequestException as e:
+            st.error(f"Request failed: {e}")
     # Show file details
-    st.write("File details:")
-    st.write(f"Filename: {file_upload.name}")
-    st.write(f"File type: {file_upload.type}")
-    st.write(f"File size: {file_upload.size} bytes")
+    # st.write("File details:")
+    # st.write(f"Filename: {file_upload.name}")
+    # st.write(f"File type: {file_upload.type}")
+    # st.write(f"File size: {file_upload.size} bytes")
     
     # Optionally read the file content (binary)
     file_content = file_upload.read()
     st.info(f"File content loaded. Size: {len(file_content)} bytes.")
     
-    
-    
-def show_home_page():
-    st.header("Welcome to the Home Page")
-    st.write("This is a basic Streamlit app. Use the sidebar to navigate between pages.")
-    
-    # Example of user interaction
-    user_input = st.text_input("Enter your name:", "")
-    if user_input:
-        st.write(f"Hello, {user_input}!")
-
-def show_about_page():
-    st.header("About This App")
-    st.write("This app demonstrates the basic features of Streamlit, including navigation, user input, and interactivity.")
-
-def show_contact_page():
-    st.header("Contact Us")
-    st.write("If you have any questions, feel free to reach out!")
-
-    # Example of a form
-    with st.form("contact_form"):
-        name = st.text_input("Name")
-        email = st.text_input("Email")
-        message = st.text_area("Message")
-        submitted = st.form_submit_button("Submit")
-
-        if submitted:
-            st.success("Thank you for your message!")
-            st.write("We'll get back to you soon.")
-
 if __name__ == "__main__":
 # Set page configuration
     st.set_page_config(

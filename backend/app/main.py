@@ -1,9 +1,12 @@
-from fastapi import FastAPI, UploadFile, Form
+from fastapi import FastAPI, UploadFile, Form, File
 from pydantic import BaseModel
 import requests
 from bs4 import BeautifulSoup
 import boto3
+import os
 from features.web_extraction.datascraper import WikiSpider, scrape_url 
+from fastapi.responses import JSONResponse, FileResponse
+from features.pdf_extraction.doclingextractor import pdf_docling_converter
 
 app = FastAPI()
 
@@ -39,6 +42,27 @@ def process_url(url_input: URLInput):
         "message": f"File {file_name} ",
         "scraped_content": result  # Include the original scraped content in the response
     }
+
+@app.post("/pdf-docling-converter/")
+async def process_pdf_to_docling(file: UploadFile = File(...)):
+    """
+    Asynchronously processes an uploaded PDF file and converts it to a markdown file.
+
+    Args:
+        file (UploadFile): The uploaded PDF file to be processed.
+
+    Returns:
+        FileResponse: A response containing the converted markdown file with a media type of "text/markdown".
+
+    Raises:
+        Exception: If there is an error during file processing or conversion.
+    """
+    input_pdf_path = f"temp_{file.filename}"
+    with open(input_pdf_path, "wb") as f:
+        f.write(await file.read())
+    markdown_file_path = pdf_docling_converter(input_pdf_path)
+    os.remove(input_pdf_path)
+    return FileResponse(markdown_file_path, media_type="text/markdown", filename="data_ex.md")
 
 # @app.post("/process-pdf")
 # async def process_pdf(file: UploadFile):
