@@ -1,17 +1,8 @@
-import boto3
-from botocore.exceptions import NoCredentialsError, ClientError
-from fastapi import FastAPI
-
 from fastapi import FastAPI, UploadFile, Form
 from pydantic import BaseModel
 import requests
 from bs4 import BeautifulSoup
-import uvicorn
-from features.web_extraction.enterprise.diffbot import diffbot_extract
-import pdfplumber
 import boto3
-# import markdown
-import os
 from features.web_extraction.datascraper import WikiSpider, scrape_url 
 
 app = FastAPI()
@@ -36,12 +27,17 @@ def upload_to_s3(file_name, content):
 
 @app.post("/scrape-url")
 def process_url(url_input: URLInput):
-    result = diffbot_extract(url_input.url)
-    file_name = "scraped_content.txt"
-    text = result.get("text", "")
+    response = requests.get(url_input.url)
+    soup = BeautifulSoup(response.content, "html.parser")
+    text = soup.get_text()
+    # markdown_content = markdown.markdown(text)
+    result = scrape_url(url_input.url)  # Scrape the URL
+    file_name = "scraped_url.md"
+    # upload_to_s3(file_name, result)
+
     return {
-        "message": f"File {file_name} saved",
-        "scraped_content": text  # Include the original scraped content in the response
+        "message": f"File {file_name} ",
+        "scraped_content": result  # Include the original scraped content in the response
     }
 
 # @app.post("/process-pdf")

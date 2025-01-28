@@ -1,14 +1,14 @@
 import streamlit as st
 import requests
 
-FASTAPI_URL = "http://localhost:8000"  # Update with your FastAPI server URL
+API_URL = "http://127.0.0.1:8000"
 
 def main():
     # Set the title of the app
     st.title("Document to Markdown Conversion")
 
     # Add a sidebar
-    st.sidebar.header("Navigation")
+    st.sidebar.header("Main Menu")
     input_format = st.sidebar.selectbox("Choose a format:", ["WebURL", "PDF"])
     
     if input_format == "WebURL":
@@ -18,7 +18,7 @@ def main():
         convert = st.button("Convert", use_container_width=True)
     elif input_format == "PDF":
         tool = st.sidebar.selectbox("Choose a method to convert PDF:", 
-                                    ["Open Source - PyMuPDF", "Enterprise - Diffbot", "Docling"])
+                                    ["Open Source - PyMuPDF", "Enterprise - Azure Document Intelligence", "Docling"])
         #st.sidebar.file_uploader("Choose a PDF File", type="pdf", accept_multiple_files=False, key="abc")
         file_upload = st.file_uploader("Choose a PDF File", type="pdf", accept_multiple_files=False)
         convert = st.button("Convert", use_container_width=True)
@@ -55,7 +55,19 @@ def check_url(url):
 def convert_web_to_markdown(tool, text_url):    
     if tool == "Open Source - Scrapy":
         #do something
-        st.write(tool, text_url)
+        response = requests.post(f"{API_URL}/scrape-url", json={"url": text_url})
+        if response.status_code == 200:
+            # Extract the response data
+            data = response.json()
+            st.success(data["message"])
+            
+            # Display the scraped content
+            st.subheader("Scraped Content")
+            st.text_area("Content", data["scraped_content"], height=300)  # Show the scraped text
+        else:
+            st.error("An error occurred while scraping the URL.")
+
+        # st.write(tool, text_url)
     elif tool == "Enterprise - Diffbot":
         #do something
         st.write(tool, text_url)
@@ -67,7 +79,7 @@ def convert_PDF_to_markdown(tool, file_upload):
     if tool == "Open Source - PyMuPDF":
         #do something
         st.write(tool)
-    elif tool == "Enterprise - Diffbot":
+    elif tool == "Enterprise - Azure Document Intelligence":
         #do something
         st.write(tool)
     elif tool == "Docling":
