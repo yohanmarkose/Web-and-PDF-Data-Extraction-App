@@ -1,6 +1,10 @@
 from pathlib import Path
 import scrapy
 from scrapy.crawler import CrawlerProcess
+from scrapy.utils.project import get_project_settings
+from twisted.internet import reactor
+from scrapy.signalmanager import dispatcher
+from scrapy import signals
 import json
 
 class WikiSpider(scrapy.Spider):
@@ -81,21 +85,22 @@ class WikiSpider(scrapy.Spider):
         return flattened_sentence
 
 def scrape_url(url):
-    spider = WikiSpider(start_url=url)
+    results = []
+    
+    def crawler_results(signal, sender, item, response, spider):
+        results.extend(spider.results)
+    
     process = CrawlerProcess(settings={
-        'LOG_ENABLED': True
+        'LOG_ENABLED': False,
+        'USER_AGENT': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
     })
     
+    dispatcher.connect(crawler_results, signal=signals.item_scraped)
     
     process.crawl(WikiSpider, start_url=url)
     process.start()
+    
+    return results
 
-    return spider.results 
-
-
-        
-        
-        # page = response.url.split("/")[-2]
-        # filename = f"quotes-{page}.html"
-        # Path(filename).write_bytes(response.body)
-        # self.log(f"Saved file {filename}")
+def convert_to_markdown(self):
+    pass
