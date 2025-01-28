@@ -40,6 +40,7 @@ def process_url(url_input: URLInput):
         "scraped_content": result  # Include the original scraped content in the response
     }
 
+
 # @app.post("/process-pdf")
 # async def process_pdf(file: UploadFile):
 #     with pdfplumber.open(file.file) as pdf:
