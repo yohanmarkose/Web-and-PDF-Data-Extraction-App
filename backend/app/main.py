@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import os
 from features.web_extraction.datascraper import WikiSpider, scrape_url 
 from fastapi.responses import JSONResponse, FileResponse
-from features.pdf_extraction.doclingextractor import docling_converter
+from features.pdf_extraction.doclingextractor import pdf_docling_converter
 from features.pdf_extraction.os_pdf_extraction import pdf_os_converter
 
 from io import BytesIO
@@ -49,13 +49,13 @@ def process_os_url(url_input: URLInput):
     input_html_path = f"temp_{soup.title.string}.html"
     with open(input_html_path, "wb") as f:
         f.write(soup.prettify("utf-8"))
-    markdown_file_path = docling_converter(input_html_path)
+    markdown_file_path = pdf_docling_converter(input_html_path)
     return FileResponse(markdown_file_path, media_type="text/markdown", filename="data_ex.md")
     
     
 @app.post("/docling-scrape-url/")
 def process_docling_url(url_input: URLInput):
-    markdown_file_path = docling_converter(url_input)
+    markdown_file_path = pdf_docling_converter(url_input)
     return FileResponse(markdown_file_path, media_type="text/markdown", filename="data_ex.md")
 
 @app.post("/scrape_pdf_os")
@@ -64,7 +64,7 @@ def process_pdf_os(uploaded_pdf: PdfInput):
     # Convert pdf_content to a BytesIO stream for pymupdf
     pdf_stream = BytesIO(pdf_content)
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    base_path = f"pdf/os/{uploaded_pdf.file_name.replace('.', '')}_{timestamp}/"
+    base_path = f"pdf/os/{uploaded_pdf.file_name.replace('.','').replace(' ','')}_{timestamp}/"
     s3_obj = S3FileManager(AWS_BUCKET_NAME, base_path)
     s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{uploaded_pdf.file_name}", pdf_content)
     file_name, result = pdf_os_converter(pdf_stream, base_path, s3_obj)
@@ -73,28 +73,29 @@ def process_pdf_os(uploaded_pdf: PdfInput):
         "scraped_content": result  # Include the original scraped content in the response
     }
 
-@app.post("/pdf-docling-converter/")
-async def process_pdf_to_docling(file: UploadFile = File(...)):
-    """
-    Asynchronously processes an uploaded PDF file and converts it to a markdown file.
-
-    Args:
-        file (UploadFile): The uploaded PDF file to be processed.
-
-    Returns:
-        FileResponse: A response containing the converted markdown file with a media type of "text/markdown".
-
-    Raises:
-        Exception: If there is an error during file processing or conversion.
-    """
-    input_pdf_path = f"temp_{file.filename}"
-    pdf_stream = await file.read()
-    # with open(input_pdf_path, "wb") as f:
-    #     f.write(await file.read())
-    markdown_file_path = docling_converter(io.BytesIO(pdf_stream))
-    print(markdown_file_path)
-    # os.remove(input_pdf_path)
-    return FileResponse(markdown_file_path, media_type="text/markdown", filename="data_ex.md")
+@app.post("/scrape_pdf_docling")
+def process_pdf_docling(uploaded_pdf: PdfInput):
+    pdf_content = base64.b64decode(uploaded_pdf.file)
+    # Convert pdf_content to a BytesIO stream for pymupdf
+    pdf_stream = BytesIO(pdf_content)
+    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    base_path = f"pdf/docling/{uploaded_pdf.file_name.replace('.','').replace(' ','')}_{timestamp}/"
+    s3_obj = S3FileManager(AWS_BUCKET_NAME, base_path)
+    s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{uploaded_pdf.file_name}", pdf_content)
+    file_name, result = pdf_docling_converter(pdf_stream, base_path, s3_obj)
+    return {
+        "message": f"File {file_name} ",
+        "scraped_content": result  # Include the original scraped content in the response
+    }
+    
+    # input_pdf_path = f"temp_{file.filename}"
+    # pdf_stream = await file.read()
+    # # with open(input_pdf_path, "wb") as f:
+    # #     f.write(await file.read())
+    # markdown_file_path = docling_converter(io.BytesIO(pdf_stream))
+    # print(markdown_file_path)
+    # # os.remove(input_pdf_path)
+    # return FileResponse(markdown_file_path, media_type="text/markdown", filename="data_ex.md")
 
 # import uvicorn
 # if __name__ == "__main__":
