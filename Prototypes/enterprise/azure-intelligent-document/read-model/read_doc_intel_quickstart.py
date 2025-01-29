@@ -60,7 +60,6 @@ PREREQUISITES:
 
 import os
 
-
 def get_words(page, line):
     result = []
     for word in page.words:
@@ -120,7 +119,7 @@ def analyze_read():
             print(f"Language code: '{language.locale}' with confidence {language.confidence}")
     
     # To learn the detailed concept of "bounding polygon" in the following content, visit: https://aka.ms/bounding-region
-    # Analyze pages.
+    
     for page in result.pages:
         print(f"----Analyzing document from page #{page.page_number}----")
         print(f"Page has width: {page.width} and height: {page.height}, measured with unit: {page.unit}")

@@ -1,5 +1,7 @@
 import streamlit as st
 import requests
+import base64
+from io import BytesIO
 
 API_URL = "http://127.0.0.1:8000"
 
@@ -18,9 +20,12 @@ def main():
         convert = st.button("Convert", use_container_width=True)
     elif input_format == "PDF":
         tool = st.sidebar.selectbox("Choose a method to convert PDF:", 
-                                    ["Open Source - PyMuPDF", "Enterprise - Azure Document Intelligence", "Docling"])
-        #st.sidebar.file_uploader("Choose a PDF File", type="pdf", accept_multiple_files=False, key="abc")
-        file_upload = st.file_uploader("Choose a PDF File", type="pdf", accept_multiple_files=False)
+                                    ["Open Source - PyMuPDF", "Enterprise - Azure Document Intelligence", "Docling"])           
+        if tool == "Enterprise - Azure Document Intelligence":
+            radio = st.radio("Choose a model :", ["Read", "Layout"])
+        else:
+            radio = None
+        file_upload = st.file_uploader("Choose a PDF File", type="pdf", accept_multiple_files=False)    
         convert = st.button("Convert", use_container_width=True)
         
     # Define what happens on each page
@@ -38,7 +43,7 @@ def main():
         elif input_format == "PDF":
             if file_upload:
                 st.success(f"File '{file_upload.name}' uploaded successfully!")
-                convert_PDF_to_markdown(tool, file_upload)
+                convert_PDF_to_markdown(tool, file_upload, radio)
             else:
                 st.info("Please upload a PDF file.")
             
@@ -81,13 +86,37 @@ def convert_web_to_markdown(tool, text_url):
         #do something
         st.write(tool, text_url)
         
-def convert_PDF_to_markdown(tool, file_upload):    
+def convert_PDF_to_markdown(tool, file_upload, radio):    
     if tool == "Open Source - PyMuPDF":
         #do something
         st.write(tool)
     elif tool == "Enterprise - Azure Document Intelligence":
-        #do something
-        st.write(tool)
+        if radio == "Read":
+            st.write("Read model selected")
+            files = {"file": (file_upload.name, file_upload, "application/pdf")}
+            try:
+                response = requests.post(f"{API_URL}/azure-intdoc-read-process-pdf", files=files)
+                if response.status_code == 200:
+                    st.success("PDF processed successfully")
+                    data = response.json()
+                    st.markdown(data["scraped_content"], unsafe_allow_html=True)
+                else:
+                    st.error("Failed to extract content")
+            except requests.exceptions.RequestException as e:
+                st.error(f"Request failed: {e}")
+        # st.markdown(response.json()["scraped_content"], unsafe_allow_html=True)
+        else:
+            st.error("Failed to extract content")
+                
+    elif radio == "Layout":
+            st.write("Layout model selected")
+            #response = requests.post(f"{API_URL}/azure-int-doc-process-pdf", json={"file": file_upload, "model": "layout"})
+            if response.status_code == 200:
+                data = response.json()
+                st.success(data["message"])
+                st.subheader("Extracted Data:")
+                markdown_content = data["extracted_data"]
+                st.markdown(markdown_content, unsafe_allow_html=True)
     elif tool == "Docling":
         #do something
         st.write(tool)
@@ -130,7 +159,7 @@ def show_contact_page():
             st.write("We'll get back to you soon.")
 
 def process_url(url):
-    response = requests.post(f"{FASTAPI_URL}/process-url", json={"url": url})
+    response = requests.post(f"{API_URL}/process-url", json={"url": url})
     return response.json()
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
-from fastapi import FastAPI, UploadFile, Form
+from fastapi import FastAPI, UploadFile, Form , File
+from fastapi.responses import FileResponse
 from mistune import markdown
 from features.web_extraction.datascraper import WikiSpider, scrape_url
 from pydantic import BaseModel
@@ -6,7 +7,8 @@ import requests
 import pdfplumber
 from bs4 import BeautifulSoup
 import boto3
-import ast
+import os
+
 
 #Diffbot imports
 from features.web_extraction.diffbot_python_client.diffbot_client import DiffbotClient,DiffbotCrawl,DiffbotSpecificExtraction
@@ -14,6 +16,12 @@ from features.web_extraction.diffbot_python_client.config import API_TOKEN
 import pprint
 import time
 from datetime import datetime
+import ast
+
+# Aure AI imports
+from features.pdf_extraction.azure_ai_intelligent_doc.read_azure_ai_model import read_azure_ai_model
+import base64
+from io import BytesIO
 
 app = FastAPI()
 
@@ -111,14 +119,15 @@ def extract_for_markdownrender(data):
         })
     return extracted_data
 
-# @app.post("/process-pdf")
-# async def process_pdf(file: UploadFile):
-#     with pdfplumber.open(file.file) as pdf:
-#         text = "\n".join([page.extract_text() for page in pdf.pages])
-#     markdown_content = markdown.markdown(text)
-#     file_name = f"{file.filename}.md"
-#     # upload_to_s3(file_name, markdown_content)
-#     return {"message": f"File {file_name} saved to S3"}
+@app.post("/azure-intdoc-read-process-pdf")
+async def azure_int_doc_process_pdf(file: UploadFile = File(...)):
+    input_pdf_path = f"./temp_{file.filename}"
+    with open(input_pdf_path, "wb") as f:
+        f.write(await file.read())
+    # print(f"Saving uploaded file to: {input_pdf_path}")
+    markdown_file_path = read_azure_ai_model(input_pdf_path)
+    os.remove(input_pdf_path)
+    return FileResponse(markdown_file_path, media_type="text/markdown", filename="data_ex.md")
 
 @app.post("/process-pdf")
 async def process_pdf(file: UploadFile):
