@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import os
 from features.web_extraction.datascraper import WikiSpider, scrape_url 
 from fastapi.responses import JSONResponse, FileResponse
-from features.pdf_extraction.doclingextractor import pdf_docling_converter
+from features.pdf_extraction.doclingextractor import docling_converter
 from features.pdf_extraction.os_pdf_extraction import pdf_os_converter
 
 from io import BytesIO
