@@ -128,27 +128,26 @@ def convert_PDF_to_markdown(tool, file_upload):
         st.write(tool)
     elif tool == "Docling":
         #do something
-        st.write(tool)
-        files = {"file": (file_upload.name, file_upload, "application/pdf")}
-        try:
-            response = requests.post(f"{API_URL}/pdf-docling-converter/", files=files)
-            if response.status_code == 200:
-                markdown_content = response.content.decode("utf-8")
-                st.markdown(markdown_content, unsafe_allow_html=True)
-                st.image("frontend/image_000008_5497e7a24d3d5d55b5d3be3f9425535d1b296c43603e2746c04e989b56544960.png")
-            else:
-                st.error(f"Error: {response.status_code} - {response.text}")
-        except requests.exceptions.RequestException as e:
-            st.error(f"Request failed: {e}")
-    # Show file details
-    # st.write("File details:")
-    # st.write(f"Filename: {file_upload.name}")
-    # st.write(f"File type: {file_upload.type}")
-    # st.write(f"File size: {file_upload.size} bytes")
-    
-    # Optionally read the file content (binary)
-    file_content = file_upload.read()
-    st.info(f"File content loaded. Size: {len(file_content)} bytes.")
+        if file_upload is not None:
+            bytes_data = file_upload.read()
+            base64_pdf = base64.b64encode(bytes_data).decode('utf-8')
+            # Send to API
+            response = requests.post(f"{API_URL}/scrape_pdf_docling",
+                json={"file": base64_pdf, "file_name": file_upload.name}
+            )
+        if response.status_code == 200:
+            # Extract the response data
+            data = response.json()
+            st.success(data["message"])
+            
+            # Display the scraped content
+            st.subheader("Scraped Content")
+            # st.text_area("Content", data["scraped_content"], height=300)  # Show the scraped text
+            markdown_content = data["scraped_content"]
+            st.markdown(markdown_content, unsafe_allow_html=True)
+        else:
+            st.error("An error occurred while scraping the URL.")
+        
     
 if __name__ == "__main__":
 # Set page configuration
