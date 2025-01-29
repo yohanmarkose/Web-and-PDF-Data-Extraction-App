@@ -68,14 +68,15 @@ def convert_web_to_markdown(tool, text_url):
 
         # st.write(tool, text_url)
     elif tool == "Enterprise - Diffbot":
-        #do something
         st.write(tool, text_url)
         response = requests.post(f"{API_URL}/diffbot-scrape-url", json={"url": text_url})
-        if response.status_code == 200:
-            data = response.json()
-            st.success(data["message"])
-            st.subheader("Scraped Content")
-            st.text_area("Content", data["scraped_content"], height=300) 
+        data = response.json()
+        if "scraped_content" in data:
+            # Display the Markdown content
+            st.markdown(data["scraped_content"], unsafe_allow_html=True)
+        else:
+            st.error("Failed to extract content")
+
     elif tool == "Docling":
         #do something
         st.write(tool, text_url)

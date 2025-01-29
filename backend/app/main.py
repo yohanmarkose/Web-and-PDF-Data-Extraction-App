@@ -65,13 +65,13 @@ def diffbot_process_url(url_input: URLInput):
     objects = response.get("objects", [])
     extracted_data = extract_for_markdownrender(objects)
     # Generate Markdown content
-    markdown_content = f"# Extracted Data\n\n"
+    markdown_content = f"# Diffbot Extracted Content\n\n" 
     markdown_content += f"**Date:** {datetime.now().strftime('%A, %B %d, %Y, %I:%M %p %Z')}\n\n"
     for item in extracted_data:
-        markdown_content += f"## Title : \n{item['title']}\n"
-        markdown_content += f"## Page URL\n[{item['pageUrl']}]({item['pageUrl']})\n"
-        markdown_content += f"## Identified Page Type\n[{item['type']}]({item['type']})\n"
-        markdown_content += f"## Text Extracts \n{item['text']}\n"
+        markdown_content += f"### Title : \n{item['title']}\n"
+        markdown_content += f"### Page URL\n[{item['pageUrl']}]({item['pageUrl']})\n"
+        markdown_content += f"### Identified Page Type\n[{item['type']}]({item['type']})\n"
+        markdown_content += f"### Text Extracts \n{item['text']}\n"
         if 'images' in item and isinstance(item['images'], list):
             for image in item['images']:
                 image_url = image['url']
