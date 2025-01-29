@@ -152,22 +152,3 @@ def read_azure_ai_model(pdf,model):
     except Exception as e:
         print(f"An error occurred: {e}")
     return None
-    # try:
-    #     load_dotenv(find_dotenv())
-    #     result = analyze(pdf,model)
-    #     print("Result:", result)
-    #     return result
-    # except HttpResponseError as error:
-    #     # Examples of how to check an HttpResponseError
-    #     if error.error is not None:
-    #         if error.error.code == "InvalidImage":
-    #             print(f"Received an invalid image error: {error.error}")
-    #         if error.error.code == "InvalidRequest":
-    #             print(f"Received an invalid request error: {error.error}")
-    #         # Raise the error again after printing it
-    #         raise
-    #     # If the inner error is None and then it is possible to check the message to get more information:
-    #     if "Invalid request".casefold() in error.message.casefold():
-    #         print(f"Uh-oh! Seems there was an invalid request: {error}")
-    #     # Raise the error again
-    #     raise
