@@ -82,12 +82,15 @@ def analyze_layout():
     import os
 
     # Set up Azure Document Intelligence Client
-    endpoint = os.environ["DOCUMENTINTELLIGENCE_ENDPOINT"]
-    key = os.environ["DOCUMENTINTELLIGENCE_API_KEY"]
+    # endpoint = os.environ["DOCUMENTINTELLIGENCE_ENDPOINT"]
+    # key = os.environ["DOCUMENTINTELLIGENCE_API_KEY"]
+    endpoint = "https://azuredocumentcheck.cognitiveservices.azure.com/"
+    key = "CVkcoUUmNSmtKX4A2UKMhoFF7MBLPPRBo4BHqZvuHXA2vMKNix1eJQQJ99BAACYeBjFXJ3w3AAALACOGLdf2"
+
     document_intelligence_client = DocumentIntelligenceClient(endpoint=endpoint, credential=AzureKeyCredential(key))
     
     # Analyze a local document
-    path_to_sample_document = "D:/BigData/DAMG7245_Assignment01/Prototypes/enterprise/azure-intelligent-document/wikipedia_example.pdf"
+    path_to_sample_document = "D:/BigData/DAMG7245_Assignment01/Prototypes/enterprise/azure-intelligent-document/sample-layout.pdf"
     with open(path_to_sample_document, "rb") as f:
         poller = document_intelligence_client.begin_analyze_document(
             "prebuilt-layout", 

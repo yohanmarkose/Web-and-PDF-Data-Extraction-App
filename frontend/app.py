@@ -116,33 +116,26 @@ def convert_PDF_to_markdown(tool, file_upload, radio):
         else:
             st.error("An error occurred while scraping the URL.")
         # st.write(tool)
+        
     elif tool == "Enterprise - Azure Document Intelligence":
-        if radio == "Read":
-            st.write("Read model selected")
-            files = {"file": (file_upload.name, file_upload, "application/pdf")}
-            try:
-                response = requests.post(f"{API_URL}/azure-intdoc-read-process-pdf", files=files)
-                if response.status_code == 200:
-                    st.success("PDF processed successfully")
-                    data = response.json()
-                    st.markdown(data["scraped_content"], unsafe_allow_html=True)
-                else:
-                    st.error("Failed to extract content")
-            except requests.exceptions.RequestException as e:
-                st.error(f"Request failed: {e}")
-        # st.markdown(response.json()["scraped_content"], unsafe_allow_html=True)
-        else:
-            st.error("Failed to extract content")
-                
-    elif radio == "Layout":
-            st.write("Layout model selected")
-            #response = requests.post(f"{API_URL}/azure-int-doc-process-pdf", json={"file": file_upload, "model": "layout"})
+        if file_upload is not None:
+            bytes_data = file_upload.read()
+            base64_pdf = base64.b64encode(bytes_data).decode('utf-8')
+            if radio == "Read":
+                st.write("Read model selected")
+                response = requests.post(f"{API_URL}/azure-intdoc-process-pdf",json={"file": base64_pdf, "file_name": file_upload.name, "model": "read"})              
+            if radio == "Layout":
+                st.write("Layout model selected")
+                response = requests.post(f"{API_URL}/azure-intdoc-process-pdf",json={"file": base64_pdf, "file_name": file_upload.name, "model": "layout"})              
+
             if response.status_code == 200:
                 data = response.json()
                 st.success(data["message"])
-                st.subheader("Extracted Data:")
-                markdown_content = data["extracted_data"]
+                markdown_content = data["scraped_content"]
                 st.markdown(markdown_content, unsafe_allow_html=True)
+            else:
+                st.error("An error occurred while processing the PDF.")
+
     elif tool == "Docling":
         #do something
         st.write(tool)
