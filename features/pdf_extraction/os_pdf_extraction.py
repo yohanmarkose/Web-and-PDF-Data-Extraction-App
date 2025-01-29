@@ -5,7 +5,6 @@ from services.s3 import S3FileManager
 
 from datetime import datetime
 
-
 import logging
 
 logging.basicConfig(
@@ -20,18 +19,11 @@ logger = logging.getLogger()
 AWS_BUCKET_NAME = "pdfparserdataset"
 
 def pdf_os_converter(pdf_stream, base_path, s3_obj):
-    logger.info(f"Reached to pdf converter fn")
-    logger.info(f"checking-1 {s3_obj.bucket_name}")
-    logger.info(f"checking-2 {s3_obj.base_path}")
-    # Give output path as s3 bucket path
-    # s3bucket_url = s3_obj.get_presigned_url(object_name, expiration=3600)
     doc = pymupdf.open(stream=pdf_stream, filetype="pdf")
-    
-    logger.info(f"base Path: {s3_obj.base_path}\n")
-    # with open(f"{output_path}/extracted.md", 'w', encoding='utf-8') as md_file:
+    md_content = []
+
     for page_num in range(len(doc)):
         page = doc[page_num]
-        md_content = []
         # Extract text and headings
         text = page.get_text("dict")
         for block in text["blocks"]:
@@ -49,22 +41,11 @@ def pdf_os_converter(pdf_stream, base_path, s3_obj):
             base_image = doc.extract_image(xref)
             image_bytes = base_image["image"]
             image_ext = base_image["ext"]
-            # image_s3_path = f"{base_path}/images/page{page_num+1}_img{img_index}.{image_ext}"
             image_s3_path = f"images/page{page_num+1}_img{img_index}.{image_ext}"
-
-            logger.info(f"image : {image_s3_path}\n")
             
-            s3_obj.upload_file(s3_obj.bucket_name, image_s3_path, image_bytes)
-            presigned_url = s3_obj.get_presigned_url(image_s3_path)
+            s3_obj.upload_file(s3_obj.bucket_name, f"{s3_obj.base_path}/{image_s3_path}", image_bytes)
 
-            logger.info(f"presigned_url : {presigned_url}\n")
-
-            if presigned_url:
-             # Append the Markdown content with the presigned URL
-                md_content.append(f"![Image]({presigned_url})\n\n")
-            else:
-                logger.info("Failed to generate presigned URL.")
-            # md_content.append(f"![Image](https://{AWS_BUCKET_NAME}.s3.amazonaws.com/{image_s3_path})\n\n")
+            md_content.append(f"![Image](https://{s3_obj.bucket_name}.s3.amazonaws.com/{s3_obj.base_path}/{image_s3_path})\n\n")
         
         # Extract links
         links = page.get_links()
@@ -89,4 +70,4 @@ def pdf_os_converter(pdf_stream, base_path, s3_obj):
     md_file_name = f"{s3_obj.base_path}/extracted_{timestamp}.md"
 
     s3_obj.upload_file(s3_obj.bucket_name, md_file_name ,final_md_content.encode('utf-8'))
-        # return md_file
+    return md_file_name, final_md_content
