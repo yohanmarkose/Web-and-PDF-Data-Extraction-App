@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import os
 from features.web_extraction.datascraper import WikiSpider, scrape_url 
 from fastapi.responses import JSONResponse, FileResponse
-from features.pdf_extraction.doclingextractor import pdf_docling_converter
+from features.pdf_extraction.doclingextractor import docling_converter
 from features.pdf_extraction.os_pdf_extraction import pdf_os_converter
 
 from io import BytesIO
@@ -42,6 +42,22 @@ def process_url(url_input: URLInput):
         "scraped_content": result  # Include the original scraped content in the response
     }
 
+@app.post("/open-source-scrape-url/")
+def process_os_url(url_input: URLInput):
+    response = requests.get(url_input.url)
+    soup = BeautifulSoup(response.content, "html.parser")
+    input_html_path = f"temp_{soup.title.string}.html"
+    with open(input_html_path, "wb") as f:
+        f.write(soup.prettify("utf-8"))
+    markdown_file_path = docling_converter(input_html_path)
+    return FileResponse(markdown_file_path, media_type="text/markdown", filename="data_ex.md")
+    
+    
+@app.post("/docling-scrape-url/")
+def process_docling_url(url_input: URLInput):
+    markdown_file_path = docling_converter(url_input)
+    return FileResponse(markdown_file_path, media_type="text/markdown", filename="data_ex.md")
+
 @app.post("/scrape_pdf_os")
 def process_pdf_os(uploaded_pdf: PdfInput):
     pdf_content = base64.b64decode(uploaded_pdf.file)
@@ -72,10 +88,12 @@ async def process_pdf_to_docling(file: UploadFile = File(...)):
         Exception: If there is an error during file processing or conversion.
     """
     input_pdf_path = f"temp_{file.filename}"
-    with open(input_pdf_path, "wb") as f:
-        f.write(await file.read())
-    markdown_file_path = pdf_docling_converter(input_pdf_path)
-    os.remove(input_pdf_path)
+    pdf_stream = await file.read()
+    # with open(input_pdf_path, "wb") as f:
+    #     f.write(await file.read())
+    markdown_file_path = docling_converter(io.BytesIO(pdf_stream))
+    print(markdown_file_path)
+    # os.remove(input_pdf_path)
     return FileResponse(markdown_file_path, media_type="text/markdown", filename="data_ex.md")
 
 # import uvicorn

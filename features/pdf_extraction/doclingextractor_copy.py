@@ -1,5 +1,4 @@
 from pathlib import Path
-import io, os
 import pandas as pd
 from docling.document_converter import DocumentConverter
 from docling.datamodel.base_models import FigureElement, InputFormat, Table
@@ -8,14 +7,13 @@ from docling.document_converter import (
     DocumentConverter,
     PdfFormatOption,
 )
-from tempfile import NamedTemporaryFile
 from docling.pipeline.simple_pipeline import SimplePipeline
 from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.document import ConversionResult
 from fastapi import UploadFile
 
-def docling_converter(file_upload: io.BytesIO):
+def docling_converter(file_upload):
     """
     Converts a PDF document to markdown format with additional options for OCR, table structure, and image generation.
 
@@ -52,35 +50,19 @@ def docling_converter(file_upload: io.BytesIO):
                 # backend=PyPdfiumDocumentBackend(),
             ),
         },
-        # image_mode=ImageRefMode.REFERENCED,
-        # artifacts_dir="images/"
     )
-    
-    file_upload.seek(0)
-    with NamedTemporaryFile(suffix=".pdf", delete=False) as temp_file:
-        # Write the PDF bytes to a temporary file
-        temp_file.write(file_upload.read())
-        temp_file.flush()
-        conv_result = doc_converter.convert(temp_file.name)
-        output_dir = Path(f"{conv_result.input.file.stem}.md")
-        conv_result.document.save_as_markdown(output_dir, image_mode=ImageRefMode.REFERENCED)
-        print(os.path.abspath(output_dir)) 
-        
-        # doc_filename = output_dir / f"{conv_result.input.file.stem}.md"
-        
-    # temp_file_path = temp_file.name
+
     # Convert the file
-    #conv_result = doc_converter.convert(temp_file_path)
+    conv_result = doc_converter.convert(file_upload)
 
     # Specify the output directory and file name
-    # output_dir = Path(f"frontend/temp/")
-    # doc_filename = output_dir / f"{conv_result.input.file.stem}.md"
-    # print(output_dir)
+    output_dir = Path(f"frontend/temp/")
+    doc_filename = output_dir / f"{conv_result.input.file.stem}.md"
+    print(output_dir)
 
     # Save as markdown
-    # conv_result.document.save_as_markdown(doc_filename, image_mode=ImageRefMode.REFERENCED, artifacts_dir="images/")
-    #conv_result.document.export_to_markdown()
+    conv_result.document.save_as_markdown(doc_filename, image_mode=ImageRefMode.REFERENCED, artifacts_dir=output_dir)
+    conv_result.document.export_to_markdown()
 
-    return (output_dir)
-
+    return (doc_filename)
 
