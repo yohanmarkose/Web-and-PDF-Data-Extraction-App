@@ -1,7 +1,10 @@
 import streamlit as st
+
 import requests
 import base64
 from io import BytesIO
+
+import base64
 
 API_URL = "http://127.0.0.1:8000"
 
@@ -89,7 +92,30 @@ def convert_web_to_markdown(tool, text_url):
 def convert_PDF_to_markdown(tool, file_upload, radio):    
     if tool == "Open Source - PyMuPDF":
         #do something
-        st.write(tool)
+        # response = requests.post(f"{API_URL}/scrape_pdf_os", json={"file": file_upload})
+        if file_upload is not None:
+        # Convert the file to base64
+            bytes_data = file_upload.read()
+            base64_pdf = base64.b64encode(bytes_data).decode('utf-8')
+            
+            # Send to API
+            response = requests.post(f"{API_URL}/scrape_pdf_os",
+                json={"file": base64_pdf, "file_name": file_upload.name}
+            )
+            
+        if response.status_code == 200:
+            # Extract the response data
+            data = response.json()
+            st.success(data["message"])
+            
+            # Display the scraped content
+            st.subheader("Scraped Content")
+            # st.text_area("Content", data["scraped_content"], height=300)  # Show the scraped text
+            markdown_content = data["scraped_content"]
+            st.markdown(markdown_content, unsafe_allow_html=True)
+        else:
+            st.error("An error occurred while scraping the URL.")
+        # st.write(tool)
     elif tool == "Enterprise - Azure Document Intelligence":
         if radio == "Read":
             st.write("Read model selected")
@@ -120,11 +146,22 @@ def convert_PDF_to_markdown(tool, file_upload, radio):
     elif tool == "Docling":
         #do something
         st.write(tool)
+        files = {"file": (file_upload.name, file_upload, "application/pdf")}
+        try:
+            response = requests.post(f"{API_URL}/pdf-docling-converter/", files=files)
+            if response.status_code == 200:
+                markdown_content = response.content.decode("utf-8")
+                st.markdown(markdown_content, unsafe_allow_html=True)
+                #st.image("frontend/image_000000_14e8639765cfcd90772eadfed24731a6c0e9968efcceae2529d5ee8ad3cf6f26.png")
+            else:
+                st.error(f"Error: {response.status_code} - {response.text}")
+        except requests.exceptions.RequestException as e:
+            st.error(f"Request failed: {e}")
     # Show file details
-    st.write("File details:")
-    st.write(f"Filename: {file_upload.name}")
-    st.write(f"File type: {file_upload.type}")
-    st.write(f"File size: {file_upload.size} bytes")
+    # st.write("File details:")
+    # st.write(f"Filename: {file_upload.name}")
+    # st.write(f"File type: {file_upload.type}")
+    # st.write(f"File size: {file_upload.size} bytes")
     
     # Optionally read the file content (binary)
     file_content = file_upload.read()
