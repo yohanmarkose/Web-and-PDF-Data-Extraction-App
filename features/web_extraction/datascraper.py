@@ -21,10 +21,10 @@ class WikiSpider(scrapy.Spider):
             yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
-        main_title = response.css("main.mw-body h1 ::text").get()
-        # body_content = response.css("div .mw-body-content".get())
-        item =  {"main_title": main_title}
-        self.results.append(item)
+        # main_title = response.css("main.mw-body h1 ::text").get()
+        # # body_content = response.css("div .mw-body-content".get())
+        # item =  {"main_title": main_title}
+        # self.results.append(item)
 
         sub_titles = response.xpath("//div[@class='mw-body-content']//h2")
         
@@ -102,5 +102,35 @@ def scrape_url(url):
     
     return results
 
-def convert_to_markdown(self):
-    pass
+def convert_table_to_markdown(table):
+    """Converts a list of table dictionaries into Markdown format."""
+    markdown_tables = []
+    
+    for table_dict in table:
+        headers = table_dict.keys()
+        rows = zip(*table_dict.values())  # Transpose rows
+        
+        # Create Markdown table
+        markdown_table = f"| {' | '.join(headers)} |\n"
+        markdown_table += f"|{' | '.join(['---'] * len(headers))}|\n"
+        for row in rows:
+            markdown_table += f"| {' | '.join(row)} |\n"
+        
+        markdown_tables.append(markdown_table)
+    
+    return "\n\n".join(markdown_tables)
+
+def convert_json_to_markdown(data):
+    """Converts JSON list to properly formatted Markdown content."""
+    markdown_content = []
+    
+    for item in data:
+        markdown_content.append(f"# {item['title']}\n")
+        markdown_content.append(item['text_content'] + "\n")
+        if item.get("images"):
+            for img in item["images"]:
+                markdown_content.append(f"![Image]({img})\n")
+        # Add tables
+        if item.get("table"):
+            markdown_content.append(convert_table_to_markdown(item["table"]))
+    return "\n\n".join(markdown_content)
