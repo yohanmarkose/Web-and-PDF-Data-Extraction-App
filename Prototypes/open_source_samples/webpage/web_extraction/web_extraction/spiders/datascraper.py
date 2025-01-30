@@ -12,39 +12,65 @@ class WikiSpider(scrapy.Spider):
             yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
+        result = []
         main_title = response.css("main.mw-body h1 ::text").get()
-        # body_content = response.css("div .mw-body-content".get())
-        yield {"main_title": main_title}
+        # item =  {"main_title": main_title}
+        # result.append(item)
 
+        # Getting contents below main title
+        target_div = response.xpath("//div[@class='mw-content-ltr mw-parser-output']")
+        following_tags = target_div.xpath("./node()")[0].xpath('following-sibling::*')
+        images, text_content, tables, links = self.extract_data(following_tags)
+        item = {
+                "title": main_title,
+                "text_content": self.process_text_content(text_content),
+                "images": images,
+                "table": tables
+            }
+        result.append(item)
+
+        # Getting contents for all data under each sub titles
         sub_titles = response.xpath("//div[@class='mw-body-content']//h2")
-        
         for title in sub_titles:
-            flag = False
-            images, text_content, tables, links = [], [], [], []
-
+            # flag = False
             title_text = title.css("::text").get()  # Text if sub title
             div_tag = title.xpath("..")[0]  # Parent div tag
             following_tags = div_tag.xpath('following-sibling::*')
-            for tag_element in following_tags: # Iterating through all the following tags to get the contents related to the heading
-                if tag_element.root.tag == 'div' and tag_element.css('::attr(class)').get() == 'mw-heading mw-heading2':  # Condition to break the loop when the next heading is reached
-                    flag = True
-                    break
-                elif tag_element.root.tag == 'figure':
-                    images.append(tag_element.css("a img::attr(src)").get())
-                elif tag_element.root.tag == 'p':
-                    text_content.append(tag_element.css("::text").getall())
-                elif tag_element.root.tag == 'table' and tag_element.css('::attr(class)').get() == "wikitable":
-                    tables.append(self.extract_table_data(tag_element))
-                
-            yield {
-            "title": title_text,
-            "text_content": self.process_text_content(text_content),
-            "images": images,
-            "table": tables
+            images, text_content, tables, links = self.extract_data(following_tags)
+            item = {
+                "title": title_text,
+                "text_content": self.process_text_content(text_content),
+                "images": images,
+                "table": tables
             }
-            if flag == True:
-                continue
+            result.append(item)
+            # if flag == True:
+            #     continue
+            # Store in spider's results list
+        return item
+    
+    def extract_data(self, following_tags):
+        images, text_content, tables, links = [], [], [], []
+        # print(f"type of tag: {type(following_tags)}")
+        for tag_element in following_tags: # Iterating through all the following tags to get the contents related to the heading
+            # print(f"type of tagelement: {type(tag_element)}")
+            if hasattr(tag_element, 'root'):  # Check if it's a Selector (not a string)
+                if tag_element.type == 'element':
+                    if tag_element.root.tag == 'div' and tag_element.css('::attr(class)').get() == 'mw-heading mw-heading2':  # Condition to break the loop when the next heading is reached
+                        # flag = True
+                        print("here in break")
+                        break
+                    elif tag_element.root.tag == 'figure':
+                        images.append(tag_element.css("a img::attr(src)").get())
+                        print("here in images")
+                    elif tag_element.root.tag == 'p':
+                        text_content.append(tag_element.css("::text").getall())
+                    elif tag_element.root.tag == 'table' and tag_element.css('::attr(class)').get() == "wikitable":
+                        tables.append(self.extract_table_data(tag_element))
+                elif tag_element.type == 'text': # If it's a text node
+                    text_content.append(tag_element.get()) # Get the text
 
+        return images, text_content, tables, links
 
     def extract_table_data(self, table_tag):
         tbody = table_tag.css("tbody")
@@ -70,6 +96,7 @@ class WikiSpider(scrapy.Spider):
         flattened_sentence = "".join([item for sublist in data for item in (sublist if isinstance(sublist, list) else [sublist])])
         flattened_sentence = " ".join(flattened_sentence.split())
         return flattened_sentence
+
                 
 
 
