@@ -3,7 +3,13 @@ import json
 from datetime import datetime, timedelta
 import boto3.s3.transfer as transfer
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
+# Read values
+AWS_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 # AWS S3 Configurations
 AWS_ACCESS_KEY_ID = "AKIAYKFQQUN54HLOMPMN"
 AWS_SECRET_ACCESS_KEY = "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"

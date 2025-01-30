@@ -58,15 +58,16 @@ def check_url(url):
 def convert_web_to_markdown(tool, text_url):    
     if tool == "Open Source - Scrapy":
         #do something
-        response = requests.post(f"{API_URL}/scrape-url", json={"url": text_url})
+        response = requests.post(f"{API_URL}/scrape_url_os", json={"url": text_url})
         if response.status_code == 200:
             # Extract the response data
             data = response.json()
             st.success(data["message"])
             
             # Display the scraped content
-            st.subheader("Scraped Content")
-            st.text_area("Content", data["scraped_content"], height=300)  # Show the scraped text
+            st.subheader("Extracted using Open source - Scrapy ")
+            markdown_content = data["scraped_content"]
+            st.markdown(markdown_content, unsafe_allow_html=True)
         else:
             st.error("An error occurred while scraping the URL.")
 
@@ -101,7 +102,7 @@ def convert_PDF_to_markdown(tool, file_upload):
             response = requests.post(f"{API_URL}/scrape_pdf_os",
                 json={"file": base64_pdf, "file_name": file_upload.name}
             )
-            
+        
         if response.status_code == 200:
             # Extract the response data
             data = response.json()
