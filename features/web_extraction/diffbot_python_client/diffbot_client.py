@@ -64,8 +64,6 @@ class DiffbotJob(DiffbotClient):
     def request(self,params):
         response = requests.get(self.compose_url(self.jobType,3),params=params)
         
-        token = os.getenv("DIFFBOT_API_KEY")
-
         response.raise_for_status
         try:
             return response.json()
