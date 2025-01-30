@@ -1,7 +1,5 @@
 import streamlit as st
-
 import requests
-
 import base64
 
 API_URL = "http://127.0.0.1:8000"
@@ -57,32 +55,29 @@ def check_url(url):
 
 def convert_web_to_markdown(tool, text_url):    
     if tool == "Open Source - Scrapy":
-        #do something
-        # response = requests.post(f"{API_URL}/scrape-url", json={"url": text_url})
-        # if response.status_code == 200:
-        #     # Extract the response data
-        #     data = response.json()
-        #     st.success(data["message"])
-            
-        #     # Display the scraped content
-        #     st.subheader("Scraped Content")
-        #     st.text_area("Content", data["scraped_content"], height=300)  # Show the scraped text
-        response = requests.post(f"{API_URL}/open-source-scrape-url/", json={"url": text_url})
+        response = requests.post(f"{API_URL}/scrape-url-os/", json={"url": text_url})
         if response.status_code == 200:
             markdown_content = response.content.decode("utf-8")
             st.markdown(markdown_content, unsafe_allow_html=True)
         else:
             st.error("An error occurred while scraping the URL.")
-
-        # st.write(tool, text_url)
     elif tool == "Enterprise - Diffbot":
         #do something
         st.write(tool, text_url)
     elif tool == "Docling":
-        response = requests.post(f"{API_URL}/docling-scrape-url/", json={"url": text_url})
+        response = requests.post(f"{API_URL}/scrape-url-docling/", json={"url": text_url})
         if response.status_code == 200:
             markdown_content = response.content.decode("utf-8")
+            # Extract the response data
+            data = response.json()
+            st.success(data["message"])
+            
+            # Display the scraped content
+            st.subheader("Scraped Content")
+            # st.text_area("Content", data["scraped_content"], height=300)  # Show the scraped text
+            markdown_content = data["scraped_content"]
             st.markdown(markdown_content, unsafe_allow_html=True)
+
         else:
             st.error("An error occurred while scraping the URL.")
         
