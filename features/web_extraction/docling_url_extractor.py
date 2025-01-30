@@ -46,7 +46,7 @@ def url_docling_converter(web_stream, base_url, base_path, s3_obj):
     )
     
     web_stream.seek(0)
-    with NamedTemporaryFile(suffix=".html", delete=True) as temp_file:
+    with NamedTemporaryFile(suffix=".html", delete=False) as temp_file:
         # Write the PDF bytes to a temporary file
         temp_file.write(web_stream.read())
         temp_file.flush()

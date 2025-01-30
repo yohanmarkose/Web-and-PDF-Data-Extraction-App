@@ -123,7 +123,6 @@ def convert_table_to_markdown(table):
 def convert_json_to_markdown(data):
     """Converts JSON list to properly formatted Markdown content."""
     markdown_content = []
-    
     for item in data:
         markdown_content.append(f"# {item['title']}\n")
         markdown_content.append(item['text_content'] + "\n")

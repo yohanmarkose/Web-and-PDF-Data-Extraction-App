@@ -62,15 +62,10 @@ def check_url(url):
 
 def convert_web_to_markdown(tool, text_url):    
     if tool == "Open Source - Scrapy":
-        response = requests.post(f"{API_URL}/scrape-url", json={"url": text_url})
+        response = requests.post(f"{API_URL}/scrape_url_os", json={"url": text_url})
         if response.status_code == 200:
-            # Extract the response data
-            data = response.json()
-            st.success(data["message"])
-            
-            # Display the scraped content
-            st.subheader("Scraped Content")
-            st.text_area("Content", data["scraped_content"], height=300)  # Show the scraped text
+            markdown_content = response.content.decode("utf-8")
+            st.markdown(markdown_content, unsafe_allow_html=True)
         else:
             st.error("An error occurred while scraping the URL.")
 
@@ -86,13 +81,23 @@ def convert_web_to_markdown(tool, text_url):
             st.error("Failed to extract content")
 
     elif tool == "Docling":
-        #do something
         st.write(tool, text_url)
-        
+        response = requests.post(f"{API_URL}/scrape-url-docling/", json={"url": text_url})
+        if response.status_code == 200:
+            markdown_content = response.content.decode("utf-8")
+            # Extract the response data
+            data = response.json()
+            st.success(data["message"])
+            st.subheader("Extracted using Open source - Scrapy ")
+            st.markdown(markdown_content, unsafe_allow_html=True)
+            st.subheader("Scraped Content")
+            markdown_content = data["scraped_content"]
+            st.markdown(markdown_content, unsafe_allow_html=True)
+        else:
+            st.error("An error occurred while scraping the URL.")
+
 def convert_PDF_to_markdown(tool, file_upload, radio):    
     if tool == "Open Source - PyMuPDF":
-        #do something
-        # response = requests.post(f"{API_URL}/scrape_pdf_os", json={"file": file_upload})
         if file_upload is not None:
         # Convert the file to base64
             bytes_data = file_upload.read()
@@ -137,7 +142,6 @@ def convert_PDF_to_markdown(tool, file_upload, radio):
                 st.error("An error occurred while processing the PDF.")
 
     elif tool == "Docling":
-        #do something
         st.write(tool)
         files = {"file": (file_upload.name, file_upload, "application/pdf")}
         try:
