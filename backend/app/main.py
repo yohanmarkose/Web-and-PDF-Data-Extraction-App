@@ -4,15 +4,16 @@ import requests
 from bs4 import BeautifulSoup
 # import boto3
 import os
-<<<<<<< HEAD
-from features.web_extraction.datascraper import WikiSpider, scrape_url, convert_json_to_markdown, convert_table_to_markdown
-=======
+from features.web_extraction.os_url_extractor import WikiSpider, scrape_url, convert_json_to_markdown, convert_table_to_markdown
+
 from features.web_extraction.os_url_extractor import WikiSpider, scrape_url 
->>>>>>> origin/main
+
 from fastapi.responses import JSONResponse, FileResponse
 from features.pdf_extraction.docling_pdf_extractor import pdf_docling_converter
 from features.web_extraction.docling_url_extractor import url_docling_converter
 from features.pdf_extraction.os_pdf_extraction import pdf_os_converter
+from features.pdf_extraction.docling_pdf_extractor import pdf_docling_converter
+from features.web_extraction.docling_url_extractor import url_docling_converter
 
 from io import BytesIO
 
@@ -37,7 +38,7 @@ class PdfInput(BaseModel):
     file: str
     file_name: str
 
-@app.post("/scrape_url_os")
+@app.post("/scrape_url_os_scrapy")
 def process_url(url_input: URLInput):
     json_result = scrape_url(url_input.url)
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
