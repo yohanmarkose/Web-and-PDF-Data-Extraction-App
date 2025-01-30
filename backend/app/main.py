@@ -140,19 +140,20 @@ def extract_for_markdownrender(data):
 async def azure_int_doc_process_pdf(uploaded_pdf: PdfInput):
     try :
         pdf_content = base64.b64decode(uploaded_pdf.file)
-        input_pdf_path = uploaded_pdf.file_name
-        with open(input_pdf_path, "wb") as f:
-            f.write(pdf_content)
+        pdf_stream = BytesIO(pdf_content)
         file_name = uploaded_pdf.file_name
         timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         base_path = f"pdf/ent/{uploaded_pdf.file_name.replace('.', '')}_{timestamp}/"
         s3_obj = S3FileManager(AWS_BUCKET_NAME, base_path)
         s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{uploaded_pdf.file_name}", pdf_content)
-        result = read_azure_ai_model(input_pdf_path,uploaded_pdf.model)
+        result = read_azure_ai_model(pdf_stream,uploaded_pdf.model)
+        s3_obj = S3FileManager(AWS_BUCKET_NAME, base_path)
+        s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{uploaded_pdf.file_name}/ext", result)
         return {
-            "message": f"File {file_name} scanned with {uploaded_pdf.model} model",
+            "message": f"File scanned with {uploaded_pdf.model} model",
             "scraped_content": result  # Include the original scraped content in the response
         }
+        
     except Exception as e:
         print(f"Error processing PDF: {e}")
         return { "error" : f"Error processing PDF: {e}"}

@@ -1,4 +1,6 @@
 import os
+import io
+from tempfile import NamedTemporaryFile
 from fastapi import UploadFile
 from azure.core.exceptions import HttpResponseError
 from dotenv import find_dotenv, load_dotenv
@@ -130,25 +132,27 @@ def analyze_layout(input_pdf_path):
 
     return markdown_content
 
-def read_azure_ai_model(pdf,model):
+def read_azure_ai_model(pdf_stream: io.BytesIO,model):
     from azure.core.exceptions import HttpResponseError
-    from dotenv import find_dotenv, load_dotenv
-
-    try:
-    # Use the model parameter to determine which model to use
-        if model == "read":
-        # Call the analyze_read function
-            markdown_content = analyze_read(pdf)
-        elif model == "layout":
-        # Call the analyze_layout function
-            markdown_content = analyze_layout(pdf)
-        else:
-            raise ValueError("Invalid model specified")
-        
-        return markdown_content
-    except HttpResponseError as e:
-        print(f"Error analyzing document: {e}")
+    pdf_stream.seek(0)
+    with NamedTemporaryFile(delete=False, suffix=".pdf") as temp_pdf:
+        temp_pdf.write(pdf_stream.read())
+        temp_pdf.flush()
+        try:
+        # Use the model parameter to determine which model to use
+            if model == "read":
+            # Call the analyze_read function
+                markdown_content = analyze_read(temp_pdf.name)
+            elif model == "layout":
+            # Call the analyze_layout function
+                markdown_content = analyze_layout(temp_pdf.name)
+            else:
+                raise ValueError("Invalid model specified")
+            
+            return markdown_content
+        except HttpResponseError as e:
+            print(f"Error analyzing document: {e}")
+            return None
+        except Exception as e:
+            print(f"An error occurred: {e}")
         return None
-    except Exception as e:
-        print(f"An error occurred: {e}")
-    return None
