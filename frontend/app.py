@@ -7,7 +7,6 @@ API_URL = "http://127.0.0.1:8000"
 def main():
     # Set the title of the app
     st.title("Document to Markdown Conversion")
-
     # Add a sidebar
     st.sidebar.header("Main Menu")
     input_format = st.sidebar.selectbox("Choose a format:", ["WebURL", "PDF"])
@@ -19,9 +18,12 @@ def main():
         convert = st.button("Convert", use_container_width=True)
     elif input_format == "PDF":
         tool = st.sidebar.selectbox("Choose a method to convert PDF:", 
-                                    ["Open Source - PyMuPDF", "Enterprise - Azure Document Intelligence", "Docling"])
-        #st.sidebar.file_uploader("Choose a PDF File", type="pdf", accept_multiple_files=False, key="abc")
-        file_upload = st.file_uploader("Choose a PDF File", type="pdf", accept_multiple_files=False)
+                                    ["Open Source - PyMuPDF", "Enterprise - Azure Document Intelligence", "Docling"])           
+        if tool == "Enterprise - Azure Document Intelligence":
+            radio = st.radio("Choose a model :", ["Read", "Layout"])
+        else:
+            radio = None
+        file_upload = st.file_uploader("Choose a PDF File", type="pdf", accept_multiple_files=False)    
         convert = st.button("Convert", use_container_width=True)
         
     # Define what happens on each page
@@ -35,11 +37,11 @@ def main():
                     st.error(f"The URL '{text_url}' does not exist or is not accessible.")
             else:
                 st.info("Please enter a URL.")
-            #show_home_page()
+    
         elif input_format == "PDF":
             if file_upload:
                 st.success(f"File '{file_upload.name}' uploaded successfully!")
-                convert_PDF_to_markdown(tool, file_upload)
+                convert_PDF_to_markdown(tool, file_upload,radio)
             else:
                 st.info("Please upload a PDF file.")
             
@@ -68,11 +70,19 @@ def convert_web_to_markdown(tool, text_url):
             st.markdown(markdown_content, unsafe_allow_html=True)
         else:
             st.error("An error occurred while scraping the URL.")
+
     elif tool == "Enterprise - Diffbot":
-        #do something
         st.write(tool, text_url)
+        response = requests.post(f"{API_URL}/scrape_diffbot_en_url", json={"url": text_url})
+        data = response.json()
+        if "scraped_content" in data:
+            # Display the Markdown content
+            st.markdown(data["scraped_content"], unsafe_allow_html=True)
+        else:
+            st.error("Failed to extract content")
+
     elif tool == "Docling":
-        response = requests.post(f"{API_URL}/scrape-url-docling/", json={"url": text_url})
+        response = requests.post(f"{API_URL}/scrape-url-docling", json={"url": text_url})
         if response.status_code == 200:
             markdown_content = response.content.decode("utf-8")
             # Extract the response data
@@ -88,7 +98,7 @@ def convert_web_to_markdown(tool, text_url):
         else:
             st.error("An error occurred while scraping the URL.")
         
-def convert_PDF_to_markdown(tool, file_upload):    
+def convert_PDF_to_markdown(tool, file_upload, radio):    
     """
     Converts a PDF file to markdown format using the specified tool.
     Parameters:
@@ -124,12 +134,27 @@ def convert_PDF_to_markdown(tool, file_upload):
             st.markdown(markdown_content, unsafe_allow_html=True)
         else:
             st.error("An error occurred while scraping the URL.")
-        # st.write(tool)
+        
     elif tool == "Enterprise - Azure Document Intelligence":
-        #do something
-        st.write(tool)
+        if file_upload is not None:
+            bytes_data = file_upload.read()
+            base64_pdf = base64.b64encode(bytes_data).decode('utf-8')
+            if radio == "Read":
+                st.write("Read model selected")
+                response = requests.post(f"{API_URL}/azure-intdoc-process-pdf",json={"file": base64_pdf, "file_name": file_upload.name, "model": "read"})              
+            if radio == "Layout":
+                st.write("Layout model selected")
+                response = requests.post(f"{API_URL}/azure-intdoc-process-pdf",json={"file": base64_pdf, "file_name": file_upload.name, "model": "layout"})              
+
+            if response.status_code == 200:
+                data = response.json()
+                st.success(data["message"])
+                markdown_content = data["scraped_content"]
+                st.markdown(markdown_content, unsafe_allow_html=True)
+            else:
+                st.error("An error occurred while processing the PDF.")
+
     elif tool == "Docling":
-        #do something
         if file_upload is not None:
             bytes_data = file_upload.read()
             base64_pdf = base64.b64encode(bytes_data).decode('utf-8')
