@@ -55,14 +55,16 @@ def check_url(url):
 
 def convert_web_to_markdown(tool, text_url):    
     if tool == "Open Source - Scrapy":
-<<<<<<< HEAD
-        #do something
-        response = requests.post(f"{API_URL}/scrape_url_os", json={"url": text_url})
-=======
-        response = requests.post(f"{API_URL}/scrape-url-os/", json={"url": text_url})
->>>>>>> origin/main
+        response = requests.post(f"{API_URL}/scrape_url_os_scrapy", json={"url": text_url})
         if response.status_code == 200:
             markdown_content = response.content.decode("utf-8")
+            # Extract the response data
+            data = response.json()
+            st.success(data["message"])
+            
+            # Display the scraped content
+            st.subheader("Extracted using Open source - Scrapy ")
+            markdown_content = data["scraped_content"]
             st.markdown(markdown_content, unsafe_allow_html=True)
         else:
             st.error("An error occurred while scraping the URL.")
@@ -78,17 +80,11 @@ def convert_web_to_markdown(tool, text_url):
             st.success(data["message"])
             
             # Display the scraped content
-<<<<<<< HEAD
-            st.subheader("Extracted using Open source - Scrapy ")
-            markdown_content = data["scraped_content"]
-            st.markdown(markdown_content, unsafe_allow_html=True)
-=======
             st.subheader("Scraped Content")
             # st.text_area("Content", data["scraped_content"], height=300)  # Show the scraped text
             markdown_content = data["scraped_content"]
             st.markdown(markdown_content, unsafe_allow_html=True)
 
->>>>>>> origin/main
         else:
             st.error("An error occurred while scraping the URL.")
         

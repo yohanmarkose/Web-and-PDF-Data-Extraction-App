@@ -38,6 +38,7 @@ class PdfInput(BaseModel):
     file: str
     file_name: str
 
+# OS web - scrapy
 @app.post("/scrape_url_os_scrapy")
 def process_url(url_input: URLInput):
     json_result = scrape_url(url_input.url)
@@ -56,17 +57,34 @@ def process_url(url_input: URLInput):
         "scraped_content": md_result  # Include the original scraped content in the response
     }
 
-@app.post("/scrape-url-os/")
-def process_os_url(url_input: URLInput):
-    response = requests.get(url_input.url)
-    soup = BeautifulSoup(response.content, "html.parser")
-    input_html_path = f"temp_{soup.title.string}.html"
-    with open(input_html_path, "wb") as f:
-        f.write(soup.prettify("utf-8"))
-    markdown_file_path = pdf_docling_converter(input_html_path)
-    return FileResponse(markdown_file_path, media_type="text/markdown", filename="data_ex.md")
-    
-@app.post("/scrape-url-docling/")
+# OS PDF - Pymupdf
+@app.post("/scrape_pdf_os")
+def process_pdf_os(uploaded_pdf: PdfInput):
+    pdf_content = base64.b64decode(uploaded_pdf.file)
+    # Convert pdf_content to a BytesIO stream for pymupdf
+    pdf_stream = BytesIO(pdf_content)
+    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    base_path = f"pdf/os/{uploaded_pdf.file_name.replace('.','').replace(' ','')}_{timestamp}/"
+    s3_obj = S3FileManager(AWS_BUCKET_NAME, base_path)
+    s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{uploaded_pdf.file_name}", pdf_content)
+    file_name, result = pdf_os_converter(pdf_stream, base_path, s3_obj)
+    return {
+        "message": f"File {file_name} ",
+        "scraped_content": result  # Include the original scraped content in the response
+    }
+
+# @app.post("/scrape-url-os/")
+# def process_os_url(url_input: URLInput):
+#     response = requests.get(url_input.url)
+#     soup = BeautifulSoup(response.content, "html.parser")
+#     input_html_path = f"temp_{soup.title.string}.html"
+#     with open(input_html_path, "wb") as f:
+#         f.write(soup.prettify("utf-8"))
+#     markdown_file_path = pdf_docling_converter(input_html_path)
+#     return FileResponse(markdown_file_path, media_type="text/markdown", filename="data_ex.md")
+
+# Os web Docling  
+@app.post("/scrape-url-docling")
 def process_docling_url(url_input: URLInput):
     response = requests.get(url_input.url)
     soup = BeautifulSoup(response.content, "html.parser")
@@ -86,21 +104,8 @@ def process_docling_url(url_input: URLInput):
         "scraped_content": result  # Include the original scraped content in the response
     }
     
-@app.post("/scrape_pdf_os/")
-def process_pdf_os(uploaded_pdf: PdfInput):
-    pdf_content = base64.b64decode(uploaded_pdf.file)
-    # Convert pdf_content to a BytesIO stream for pymupdf
-    pdf_stream = BytesIO(pdf_content)
-    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    base_path = f"pdf/os/{uploaded_pdf.file_name.replace('.','').replace(' ','')}_{timestamp}/"
-    s3_obj = S3FileManager(AWS_BUCKET_NAME, base_path)
-    s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{uploaded_pdf.file_name}", pdf_content)
-    file_name, result = pdf_os_converter(pdf_stream, base_path, s3_obj)
-    return {
-        "message": f"File {file_name} ",
-        "scraped_content": result  # Include the original scraped content in the response
-    }
 
+# Os web Docling 
 @app.post("/scrape_pdf_docling")
 def process_pdf_docling(uploaded_pdf: PdfInput):
     pdf_content = base64.b64decode(uploaded_pdf.file)
