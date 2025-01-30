@@ -1,3 +1,4 @@
+import time
 import streamlit as st
 import requests
 import base64
@@ -13,13 +14,13 @@ def main():
     
     if input_format == "WebURL":
         tool = st.sidebar.selectbox("Choose a method to convert URL:", 
-                                    ["Open Source - Scrapy", "Enterprise - Diffbot", "Docling"])
+                                    ["Scrapy (OS)", "Diffbot (Enterprise)", "Docling"])
         text_url = st.text_input("Enter URL here")
         convert = st.button("Convert", use_container_width=True)
     elif input_format == "PDF":
         tool = st.sidebar.selectbox("Choose a method to convert PDF:", 
-                                    ["Open Source - PyMuPDF", "Enterprise - Azure Document Intelligence", "Docling"])           
-        if tool == "Enterprise - Azure Document Intelligence":
+                                    ["PyMuPDF (OS)", "Azure Document Intelligence (Enterprise)", "Docling"])           
+        if tool == "Azure Document Intelligence (Enterprise)":
             radio = st.radio("Choose a model :", ["Read", "Layout"])
         else:
             radio = None
@@ -55,125 +56,78 @@ def check_url(url):
     except requests.RequestException:
         return False
 
-def convert_web_to_markdown(tool, text_url):    
-    if tool == "Open Source - Scrapy":
+def convert_web_to_markdown(tool, text_url):
+    progress_bar = st.progress(0)  
+    progress_text = st.empty()  
+    
+    progress_text.text("Starting conversion...")
+    time.sleep(0.5)
+    progress_bar.progress(25)
+
+    if tool == "Scrapy (OS)":
         response = requests.post(f"{API_URL}/scrape_url_os_scrapy", json={"url": text_url})
-        if response.status_code == 200:
-            markdown_content = response.content.decode("utf-8")
-            # Extract the response data
-            data = response.json()
-            st.success(data["message"])
-            
-            # Display the scraped content
-            st.subheader("Extracted using Open source - Scrapy ")
-            markdown_content = data["scraped_content"]
-            st.markdown(markdown_content, unsafe_allow_html=True)
-        else:
-            st.error("An error occurred while scraping the URL.")
-
-    elif tool == "Enterprise - Diffbot":
-        st.write(tool, text_url)
+    elif tool == "Diffbot (Enterprise)":
         response = requests.post(f"{API_URL}/scrape_diffbot_en_url", json={"url": text_url})
-        data = response.json()
-        if "scraped_content" in data:
-            # Display the Markdown content
-            st.markdown(data["scraped_content"], unsafe_allow_html=True)
-        else:
-            st.error("Failed to extract content")
-
     elif tool == "Docling":
         response = requests.post(f"{API_URL}/scrape-url-docling", json={"url": text_url})
-        if response.status_code == 200:
-            markdown_content = response.content.decode("utf-8")
-            # Extract the response data
-            data = response.json()
-            st.success(data["message"])
-            
-            # Display the scraped content
-            st.subheader("Scraped Content")
-            # st.text_area("Content", data["scraped_content"], height=300)  # Show the scraped text
-            markdown_content = data["scraped_content"]
-            st.markdown(markdown_content, unsafe_allow_html=True)
-
-        else:
-            st.error("An error occurred while scraping the URL.")
+    
+    progress_text.text("Processing request...")
+    progress_bar.progress(50)
+    
+    if response.status_code == 200:
+        data = response.json()
+        progress_text.text("Finalizing output...")
+        progress_bar.progress(75)
+        time.sleep(0.5)
+        
+        st.success("Conversion successful!")
+        st.markdown(data["scraped_content"], unsafe_allow_html=True)
+    else:
+        st.error("An error occurred while processing.")
+    
+    progress_bar.progress(100)
+    time.sleep(0.5)
+    progress_bar.empty()
         
 def convert_PDF_to_markdown(tool, file_upload, radio):    
-    """
-    Converts a PDF file to markdown format using the specified tool.
-    Parameters:
-    tool (str): The tool to use for conversion. Options are "Open Source - PyMuPDF", 
-                "Enterprise - Azure Document Intelligence", and "Docling".
-    file_upload (UploadedFile): The uploaded PDF file to be converted.
-    Returns:
-    None: The function writes the converted markdown content to the Streamlit app or 
-          displays an error message if the conversion fails.
-    """
-    if tool == "Open Source - PyMuPDF":
-        # response = requests.post(f"{API_URL}/scrape_pdf_os", json={"file": file_upload})
-        if file_upload is not None:
-        # Convert the file to base64
-            bytes_data = file_upload.read()
-            base64_pdf = base64.b64encode(bytes_data).decode('utf-8')
-            
-            # Send to API
-            response = requests.post(f"{API_URL}/scrape_pdf_os",
-                json={"file": base64_pdf, "file_name": file_upload.name, "model": ""}
-            )
+    progress_bar = st.progress(0)
+    progress_text = st.empty()
+    
+    progress_text.text("Uploading file...")
+    time.sleep(0.5)
+    progress_bar.progress(20)
+
+    if file_upload is not None:
+        bytes_data = file_upload.read()
+        base64_pdf = base64.b64encode(bytes_data).decode('utf-8')
+        
+        progress_text.text("Sending file for processing...")
+        progress_bar.progress(50)
+        
+        if tool == "Open Source - PyMuPDF":
+            response = requests.post(f"{API_URL}/scrape_pdf_os", json={"file": base64_pdf, "file_name": file_upload.name, "model": ""})
+        elif tool == "Azure Document Intelligence (Enterprise)":
+            model = "read" if radio == "Read" else "layout"
+            response = requests.post(f"{API_URL}/azure-intdoc-process-pdf", json={"file": base64_pdf, "file_name": file_upload.name, "model": model})
+        elif tool == "Docling":
+            response = requests.post(f"{API_URL}/scrape_pdf_docling", json={"file": base64_pdf, "file_name": file_upload.name, "model": ""})
+        
+        progress_text.text("Processing document...")
+        progress_bar.progress(75)
         
         if response.status_code == 200:
-            # Extract the response data
             data = response.json()
-            st.success(data["message"])
+            progress_text.text("Finalizing output...")
+            time.sleep(0.5)
             
-            # Display the scraped content
-            st.subheader("Scraped Content")
-            # st.text_area("Content", data["scraped_content"], height=300)  # Show the scraped text
-            markdown_content = data["scraped_content"]
-            st.markdown(markdown_content, unsafe_allow_html=True)
+            st.success("PDF conversion successful!")
+            st.markdown(data["scraped_content"], unsafe_allow_html=True)
         else:
-            st.error("An error occurred while extracting the PDF.")
-        
-    elif tool == "Enterprise - Azure Document Intelligence":
-        if file_upload is not None:
-            bytes_data = file_upload.read()
-            base64_pdf = base64.b64encode(bytes_data).decode('utf-8')
-            if radio == "Read":
-                st.write("Read model selected")
-                response = requests.post(f"{API_URL}/azure-intdoc-process-pdf",json={"file": base64_pdf, "file_name": file_upload.name, "model": "read"})              
-            if radio == "Layout":
-                st.write("Layout model selected")
-                response = requests.post(f"{API_URL}/azure-intdoc-process-pdf",json={"file": base64_pdf, "file_name": file_upload.name, "model": "layout"})              
-
-            if response.status_code == 200:
-                data = response.json()
-                st.success(data["message"])
-                markdown_content = data["scraped_content"]
-                st.markdown(markdown_content, unsafe_allow_html=True)
-            else:
-                st.error("An error occurred while processing the PDF.")
-
-    elif tool == "Docling":
-        if file_upload is not None:
-            bytes_data = file_upload.read()
-            base64_pdf = base64.b64encode(bytes_data).decode('utf-8')
-            # Send to API
-            response = requests.post(f"{API_URL}/scrape_pdf_docling",
-                json={"file": base64_pdf, "file_name": file_upload.name, "model": ""}
-            )
-        if response.status_code == 200:
-            # Extract the response data
-            data = response.json()
-            st.success(data["message"])
-            
-            # Display the scraped content
-            st.subheader("Scraped Content")
-            # st.text_area("Content", data["scraped_content"], height=300)  # Show the scraped text
-            markdown_content = data["scraped_content"]
-            st.markdown(markdown_content, unsafe_allow_html=True)
-        else:
-            st.error("An error occurred while scraping the URL.")
-        
+            st.error("An error occurred while processing the PDF.")
+    
+    progress_bar.progress(100)
+    time.sleep(0.5)
+    progress_bar.empty()        
     
 if __name__ == "__main__":
 # Set page configuration
