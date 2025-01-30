@@ -16,7 +16,7 @@ logger = logging.getLogger()
 
 
 # from services.s3 import S3FileManager
-AWS_BUCKET_NAME = "pdfparserdataset"
+# AWS_BUCKET_NAME = "pdfparserdataset"
 
 def pdf_os_converter(pdf_stream, base_path, s3_obj):
     doc = pymupdf.open(stream=pdf_stream, filetype="pdf")

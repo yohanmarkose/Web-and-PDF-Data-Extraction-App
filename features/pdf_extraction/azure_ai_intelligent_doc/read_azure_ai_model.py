@@ -23,7 +23,7 @@ def _in_span(word, spans):
             return True
     return False
 
-# how to obtain the endpoint and check .azure-env file for key
+# how to obtain the endpoint and check .env file for key
 endpoint = os.getenv("DOCUMENTINTELLIGENCE_ENDPOINT")
 key = os.getenv("DOCUMENTINTELLIGENCE_API_KEY")
 
@@ -133,7 +133,7 @@ def analyze_layout(input_pdf_path):
 def read_azure_ai_model(pdf_stream: io.BytesIO,model):
     from azure.core.exceptions import HttpResponseError
     pdf_stream.seek(0)
-    with NamedTemporaryFile(delete=False, suffix=".pdf") as temp_pdf:
+    with NamedTemporaryFile(delete=True, suffix=".pdf") as temp_pdf:
         temp_pdf.write(pdf_stream.read())
         temp_pdf.flush()
         try:

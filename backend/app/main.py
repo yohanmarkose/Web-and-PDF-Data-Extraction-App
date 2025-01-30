@@ -2,7 +2,7 @@ from fastapi import FastAPI, UploadFile, Form, File
 from pydantic import BaseModel
 import requests
 from bs4 import BeautifulSoup
-# import boto3
+
 import os
 from features.web_extraction.os_url_extractor import WikiSpider, scrape_url, convert_json_to_markdown, convert_table_to_markdown
 
@@ -63,7 +63,6 @@ def process_url(url_input: URLInput):
 
     md_result = convert_json_to_markdown(json_result) # Scrape the URL
     s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/extracted_data.md", str(md_result))
-    # upload_to_s3(file_name, result)
 
     return {
         "message": f"Data Scraped and stored in https://{s3_obj.bucket_name}.s3.amazonaws.com/{s3_obj.base_path}/extracted_data.md",
@@ -85,16 +84,6 @@ def process_pdf_os(uploaded_pdf: PdfInput):
         "message": f"File {file_name} ",
         "scraped_content": result  # Include the original scraped content in the response
     }
-
-# @app.post("/scrape-url-os/")
-# def process_os_url(url_input: URLInput):
-#     response = requests.get(url_input.url)
-#     soup = BeautifulSoup(response.content, "html.parser")
-#     input_html_path = f"temp_{soup.title.string}.html"
-#     with open(input_html_path, "wb") as f:
-#         f.write(soup.prettify("utf-8"))
-#     markdown_file_path = pdf_docling_converter(input_html_path)
-#     return FileResponse(markdown_file_path, media_type="text/markdown", filename="data_ex.md")
 
 # Os web Docling  
 @app.post("/scrape-url-docling")

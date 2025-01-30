@@ -110,7 +110,6 @@ def convert_PDF_to_markdown(tool, file_upload, radio):
           displays an error message if the conversion fails.
     """
     if tool == "Open Source - PyMuPDF":
-        #do something
         # response = requests.post(f"{API_URL}/scrape_pdf_os", json={"file": file_upload})
         if file_upload is not None:
         # Convert the file to base64
@@ -119,7 +118,7 @@ def convert_PDF_to_markdown(tool, file_upload, radio):
             
             # Send to API
             response = requests.post(f"{API_URL}/scrape_pdf_os",
-                json={"file": base64_pdf, "file_name": file_upload.name}
+                json={"file": base64_pdf, "file_name": file_upload.name, "model": ""}
             )
         
         if response.status_code == 200:
@@ -133,7 +132,7 @@ def convert_PDF_to_markdown(tool, file_upload, radio):
             markdown_content = data["scraped_content"]
             st.markdown(markdown_content, unsafe_allow_html=True)
         else:
-            st.error("An error occurred while scraping the URL.")
+            st.error("An error occurred while extracting the PDF.")
         
     elif tool == "Enterprise - Azure Document Intelligence":
         if file_upload is not None:
@@ -160,7 +159,7 @@ def convert_PDF_to_markdown(tool, file_upload, radio):
             base64_pdf = base64.b64encode(bytes_data).decode('utf-8')
             # Send to API
             response = requests.post(f"{API_URL}/scrape_pdf_docling",
-                json={"file": base64_pdf, "file_name": file_upload.name}
+                json={"file": base64_pdf, "file_name": file_upload.name, "model": ""}
             )
         if response.status_code == 200:
             # Extract the response data
