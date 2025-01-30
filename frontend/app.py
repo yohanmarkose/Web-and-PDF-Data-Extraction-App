@@ -1,7 +1,5 @@
 import streamlit as st
-
 import requests
-
 import base64
 
 API_URL = "http://127.0.0.1:8000"
@@ -57,27 +55,42 @@ def check_url(url):
 
 def convert_web_to_markdown(tool, text_url):    
     if tool == "Open Source - Scrapy":
+<<<<<<< HEAD
         #do something
         response = requests.post(f"{API_URL}/scrape_url_os", json={"url": text_url})
+=======
+        response = requests.post(f"{API_URL}/scrape-url-os/", json={"url": text_url})
+>>>>>>> origin/main
         if response.status_code == 200:
+            markdown_content = response.content.decode("utf-8")
+            st.markdown(markdown_content, unsafe_allow_html=True)
+        else:
+            st.error("An error occurred while scraping the URL.")
+    elif tool == "Enterprise - Diffbot":
+        #do something
+        st.write(tool, text_url)
+    elif tool == "Docling":
+        response = requests.post(f"{API_URL}/scrape-url-docling/", json={"url": text_url})
+        if response.status_code == 200:
+            markdown_content = response.content.decode("utf-8")
             # Extract the response data
             data = response.json()
             st.success(data["message"])
             
             # Display the scraped content
+<<<<<<< HEAD
             st.subheader("Extracted using Open source - Scrapy ")
             markdown_content = data["scraped_content"]
             st.markdown(markdown_content, unsafe_allow_html=True)
+=======
+            st.subheader("Scraped Content")
+            # st.text_area("Content", data["scraped_content"], height=300)  # Show the scraped text
+            markdown_content = data["scraped_content"]
+            st.markdown(markdown_content, unsafe_allow_html=True)
+
+>>>>>>> origin/main
         else:
             st.error("An error occurred while scraping the URL.")
-
-        # st.write(tool, text_url)
-    elif tool == "Enterprise - Diffbot":
-        #do something
-        st.write(tool, text_url)
-    elif tool == "Docling":
-        #do something
-        st.write(tool, text_url)
         
 def convert_PDF_to_markdown(tool, file_upload):    
     """
@@ -121,27 +134,26 @@ def convert_PDF_to_markdown(tool, file_upload):
         st.write(tool)
     elif tool == "Docling":
         #do something
-        st.write(tool)
-        files = {"file": (file_upload.name, file_upload, "application/pdf")}
-        try:
-            response = requests.post(f"{API_URL}/pdf-docling-converter/", files=files)
-            if response.status_code == 200:
-                markdown_content = response.content.decode("utf-8")
-                st.markdown(markdown_content, unsafe_allow_html=True)
-                #st.image("frontend/image_000000_14e8639765cfcd90772eadfed24731a6c0e9968efcceae2529d5ee8ad3cf6f26.png")
-            else:
-                st.error(f"Error: {response.status_code} - {response.text}")
-        except requests.exceptions.RequestException as e:
-            st.error(f"Request failed: {e}")
-    # Show file details
-    # st.write("File details:")
-    # st.write(f"Filename: {file_upload.name}")
-    # st.write(f"File type: {file_upload.type}")
-    # st.write(f"File size: {file_upload.size} bytes")
-    
-    # Optionally read the file content (binary)
-    file_content = file_upload.read()
-    st.info(f"File content loaded. Size: {len(file_content)} bytes.")
+        if file_upload is not None:
+            bytes_data = file_upload.read()
+            base64_pdf = base64.b64encode(bytes_data).decode('utf-8')
+            # Send to API
+            response = requests.post(f"{API_URL}/scrape_pdf_docling",
+                json={"file": base64_pdf, "file_name": file_upload.name}
+            )
+        if response.status_code == 200:
+            # Extract the response data
+            data = response.json()
+            st.success(data["message"])
+            
+            # Display the scraped content
+            st.subheader("Scraped Content")
+            # st.text_area("Content", data["scraped_content"], height=300)  # Show the scraped text
+            markdown_content = data["scraped_content"]
+            st.markdown(markdown_content, unsafe_allow_html=True)
+        else:
+            st.error("An error occurred while scraping the URL.")
+        
     
 if __name__ == "__main__":
 # Set page configuration
