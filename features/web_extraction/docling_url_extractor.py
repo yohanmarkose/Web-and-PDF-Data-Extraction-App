@@ -73,7 +73,7 @@ def url_docling_converter(web_stream, base_url, base_path, s3_obj):
                     )
                 else:
                     final_md_content = final_md_content + f"\n![image]({img_url})\n"
-                print(img_url)
+                #print(img_url)
                 
 
     # conv_result = doc_converter.convert(web_stream)
