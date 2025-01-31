@@ -97,7 +97,7 @@ def process_docling_url(url_input: URLInput):
     s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{html_title}", BytesIO(url_input.url.encode('utf-8')))
     file_name, result = url_docling_converter(html_stream, url_input.url, base_path, s3_obj)
     return {
-        "message": f"File {file_name} ",
+        "message": f"Data Scraped and stored in https://{s3_obj.bucket_name}.s3.amazonaws.com/{file_name}",
         "scraped_content": result  # Include the original scraped content in the response
     }
     
@@ -114,7 +114,7 @@ def process_pdf_docling(uploaded_pdf: PdfInput):
     s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{uploaded_pdf.file_name}", pdf_content)
     file_name, result = pdf_docling_converter(pdf_stream, base_path, s3_obj)
     return {
-        "message": f"File {file_name} ",
+        "message": f"Data Scraped and stored in https://{s3_obj.bucket_name}.s3.amazonaws.com/{file_name}",
         "scraped_content": result  # Include the original scraped content in the response
     }
 
@@ -159,7 +159,7 @@ def diffbot_process_url(url_input: URLInput):
     s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/extracted_data.md", str(file_name))
 
     return {
-        "message": f"File {file_name} ",
+        "message": f"Data Scraped and stored in https://{s3_obj.bucket_name}.s3.amazonaws.com/{base_path}extracted_data.md",
         "scraped_content": markdown_content  
     }
 
@@ -170,7 +170,7 @@ async def azure_int_doc_process_pdf(uploaded_pdf: PdfInput):
         pdf_content = base64.b64decode(uploaded_pdf.file)
         pdf_stream = BytesIO(pdf_content)
         timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        base_path = f"pdf/ent/{uploaded_pdf.file_name.replace('.', '')}_{timestamp}/"
+        base_path = f"pdf/ent/{uploaded_pdf.file_name.replace('.', '').replace(' ','')}_{timestamp}/"
         s3_obj = S3FileManager(AWS_BUCKET_NAME, base_path)
         s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{uploaded_pdf.file_name}", pdf_content)
         result = read_azure_ai_model(pdf_stream,uploaded_pdf.model)        
@@ -185,7 +185,7 @@ async def azure_int_doc_process_pdf(uploaded_pdf: PdfInput):
                 "scraped_content": "Refer to azure documentation for the file size requirement."
             }
         # Ensure extracted data is valid before uploading
-        extracted_data_path = f"{s3_obj.base_path}/{uploaded_pdf.model}/{uploaded_pdf.file_name}/extracted_data.md"
+        extracted_data_path = f"{s3_obj.base_path}/{uploaded_pdf.model}/extracted_data.md"
         if isinstance(result, str) and result.strip():
             s3_obj.upload_file(AWS_BUCKET_NAME, extracted_data_path, result)
         else:
@@ -195,7 +195,7 @@ async def azure_int_doc_process_pdf(uploaded_pdf: PdfInput):
             }
         
         return {
-            "message": f"File scanned with {uploaded_pdf.model} model.",
+            "message": f"Data Scraped and stored in https://{s3_obj.bucket_name}.s3.amazonaws.com/{base_path}{uploaded_pdf.model}/extracted_data.md",
             "scraped_content": result
         }
     except Exception as e:
