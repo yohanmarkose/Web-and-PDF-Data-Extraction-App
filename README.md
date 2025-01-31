@@ -16,11 +16,13 @@ WE ATTEST THAT WE HAVEN’T USED ANY OTHER STUDENTS’ WORK IN OUR ASSIGNMENT AN
 
 Application: [Streamlit Deployment](https://webpdfdataextractiontool.streamlit.app/)
 
-Bakcend API: [Google Cloud Run](https://fastapi-service-rhtrkfwlfq-uc.a.run.app)
+Backend API: [Google Cloud Run](https://fastapi-service-rhtrkfwlfq-uc.a.run.app/docs)
 
 Google Codelab: [Codelab](https://codelabs-preview.appspot.com/?file_id=1xwrkjouN6SqtHA2sCEjKclfBJKb0yfX7YK_DwzOorpM#0)
 
-Video Walkthrough: [Video]()
+Google Docs: [Project Document](https://docs.google.com/document/d/1xwrkjouN6SqtHA2sCEjKclfBJKb0yfX7YK_DwzOorpM/edit?usp=sharing)
+
+Video Walkthrough: [Video](https://drive.google.com/file/d/1gRAybJijrtRXynX8-bh1Lo14EUulq4xh/view?usp=sharing)
 
 ## Technologies Used
 

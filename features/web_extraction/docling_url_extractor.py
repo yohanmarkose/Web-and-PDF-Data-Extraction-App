@@ -75,13 +75,7 @@ def url_docling_converter(web_stream, base_url, base_path, s3_obj):
                     final_md_content = final_md_content + f"\n![image]({img_url})\n"
                 #print(img_url)
                 
-
-    # conv_result = doc_converter.convert(web_stream)
-    # timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    # md_file_name = f"{s3_obj.base_path}/extracted_{timestamp}.md"
-    # final_md_content = conv_result.document.export_to_markdown(image_mode=ImageRefMode.REFERENCED)
-
-        # Upload the markdown file to S3   
+    # Upload the markdown file to S3   
     s3_obj.upload_file(s3_obj.bucket_name, md_file_name ,final_md_content.encode('utf-8'))
         
     # Return the markdown file name and content

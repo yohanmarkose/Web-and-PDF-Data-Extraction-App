@@ -80,7 +80,7 @@ def process_pdf_os(uploaded_pdf: PdfInput):
         "scraped_content": result
     }
 
-# Os web Docling  
+# Web Docling  
 @app.post("/scrape-url-docling")
 def process_docling_url(url_input: URLInput):
     response = requests.get(url_input.url)
@@ -105,7 +105,7 @@ def process_docling_url(url_input: URLInput):
     }
     
 
-# Os web Docling 
+# PDF Docling 
 @app.post("/scrape_pdf_docling")
 def process_pdf_docling(uploaded_pdf: PdfInput):
     pdf_content = base64.b64decode(uploaded_pdf.file)
