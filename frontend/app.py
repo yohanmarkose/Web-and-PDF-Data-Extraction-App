@@ -2,7 +2,7 @@ import time
 import streamlit as st
 import requests, os, base64
 
-API_URL = "http://localhost:8000"# + os.getenv("API_PORT", "8080")
+API_URL = "https://fastapi-service-rhtrkfwlfq-uc.a.run.app"
 
 def main():
     # Set the title of the app
