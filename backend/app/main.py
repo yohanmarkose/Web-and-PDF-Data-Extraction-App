@@ -91,7 +91,7 @@ def process_docling_url(url_input: URLInput):
     # Setting the S3 bucket path and filename
     html_title = f"URL_{soup.title.string}.txt"
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    base_path = f"web/docling/{html_title.replace('.','').replace(' ','')}_{timestamp}/"
+    base_path = f"web/docling/{html_title.replace('.','').replace(' ','').replace(',','').replace("'",'')}_{timestamp}/"
 
     s3_obj = S3FileManager(AWS_BUCKET_NAME, base_path)
     s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{html_title}", BytesIO(url_input.url.encode('utf-8')))
