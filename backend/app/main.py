@@ -173,18 +173,35 @@ async def azure_int_doc_process_pdf(uploaded_pdf: PdfInput):
         base_path = f"pdf/ent/{uploaded_pdf.file_name.replace('.', '')}_{timestamp}/"
         s3_obj = S3FileManager(AWS_BUCKET_NAME, base_path)
         s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{uploaded_pdf.file_name}", pdf_content)
-        result = read_azure_ai_model(pdf_stream,uploaded_pdf.model)
-        s3_obj = S3FileManager(AWS_BUCKET_NAME, base_path)
-        s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{uploaded_pdf.model}/{uploaded_pdf.file_name}/extracted_data.md", result)
+        result = read_azure_ai_model(pdf_stream,uploaded_pdf.model)        
+        try:
+            result = read_azure_ai_model(pdf_stream, uploaded_pdf.model)
+            if not result:
+                raise ValueError("Azure AI Model returned an empty response")
+            
+        except Exception as azure_error:
+            return {
+                "message": f"Error analyzing document: {str(azure_error)}.",
+                "scraped_content": "Refer to azure documentation for the file size requirement."
+            }
+        # Ensure extracted data is valid before uploading
+        extracted_data_path = f"{s3_obj.base_path}/{uploaded_pdf.model}/{uploaded_pdf.file_name}/extracted_data.md"
+        if isinstance(result, str) and result.strip():
+            s3_obj.upload_file(AWS_BUCKET_NAME, extracted_data_path, result)
+        else:
+            return {
+                "message": "Extracted data is empty or invalid",
+                "scraped_content": result
+            }
+        
         return {
-            "message": f"File scanned with {uploaded_pdf.model} model",
+            "message": f"File scanned with {uploaded_pdf.model} model.",
             "scraped_content": result
         }
-        
     except Exception as e:
-        print(f"Error processing PDF: {e}")
-        return { "error" : f"Error processing PDF: {e}"}
-
+        return {"error": f"Unexpected error processing PDF: {str(e)}"}
+    
+    
 # To get url domain name from url
 def url_to_folder_name(url):
     # Extract the main domain

@@ -85,7 +85,6 @@ def convert_web_to_markdown(tool, text_url):
             data = response.json()
             progress_text.text("Finalizing output...")
             progress_bar.progress(75)
-            st.success("Conversion successful!")
             st.subheader(data["message"])
             st.markdown(data["scraped_content"], unsafe_allow_html=True)
         else:
@@ -94,6 +93,7 @@ def convert_web_to_markdown(tool, text_url):
         st.error("An error occurred while processing the url")
     
     progress_bar.progress(100)
+    progress_text.empty()
     progress_bar.empty()
         
 def convert_PDF_to_markdown(tool, file_upload, radio):    
@@ -125,7 +125,6 @@ def convert_PDF_to_markdown(tool, file_upload, radio):
             if response.status_code == 200:
                 data = response.json()
                 progress_text.text("Finalizing output...")
-                st.success("PDF conversion successful!")
                 st.subheader(data["message"])
                 st.markdown(data["scraped_content"], unsafe_allow_html=True)
             else:
@@ -134,6 +133,7 @@ def convert_PDF_to_markdown(tool, file_upload, radio):
             st.error("An error occurred while processing the PDF.")
     
     progress_bar.progress(100)
+    progress_text.empty()
     progress_bar.empty()        
     
 if __name__ == "__main__":
