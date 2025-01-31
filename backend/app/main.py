@@ -91,11 +91,14 @@ def process_docling_url(url_input: URLInput):
     # Setting the S3 bucket path and filename
     html_title = f"URL_{soup.title.string}.txt"
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    base_path = f"web/docling/{html_title.replace('.','').replace(' ','').replace(',','').replace("'",'')}_{timestamp}/"
+    print(html_title)
+    base_path = f"web/docling/{html_title.replace('.','').replace(' ','').replace(',','').replace("’","").replace('+','')}_{timestamp}/"
 
     s3_obj = S3FileManager(AWS_BUCKET_NAME, base_path)
     s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{html_title}", BytesIO(url_input.url.encode('utf-8')))
     file_name, result = url_docling_converter(html_stream, url_input.url, base_path, s3_obj)
+    print(base_path)
+    print(file_name)
     return {
         "message": f"Data Scraped and stored in https://{s3_obj.bucket_name}.s3.amazonaws.com/{file_name}",
         "scraped_content": result  # Include the original scraped content in the response
@@ -149,14 +152,14 @@ def diffbot_process_url(url_input: URLInput):
                 markdown_content += f"{image_title} : ![{image_title}]({image_url})\n\n"
         else:
             markdown_content += f"## Images Extracts : \n No Images Found\n"
-    file_name = "diffbot_scraped_url.md"
+    #file_name = "diffbot_scraped_url.md"
 
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
     folder_name = url_to_folder_name(url_input.url)
     base_path = f"web/ent/{folder_name}_{timestamp}/"
     s3_obj = S3FileManager(AWS_BUCKET_NAME, base_path)
-    s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/web_url.txt", str(url_input.url))
-    s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/extracted_data.md", str(file_name))
+    s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/diffbot_scraped_url.txt", str(url_input.url))
+    s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/extracted_data.md", str(markdown_content))
 
     return {
         "message": f"Data Scraped and stored in https://{s3_obj.bucket_name}.s3.amazonaws.com/{base_path}extracted_data.md",
