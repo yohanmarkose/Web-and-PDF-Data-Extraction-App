@@ -10,10 +10,7 @@ load_dotenv()
 AWS_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-# AWS S3 Configurations
-AWS_ACCESS_KEY_ID = "AKIAYKFQQUN54HLOMPMN"
-AWS_SECRET_ACCESS_KEY = "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"
-AWS_BUCKET_NAME = "pdfparserdataset"
+
 class S3FileManager:
     def __init__(self, bucket_name, base_path=''):
         self.s3 = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, 

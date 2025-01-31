@@ -1,0 +1,98 @@
+# Document Analysis Results
+
+## Key-value pairs
+
+## Paragraphs
+
+Q
+
+WIKIPEDIA The Free Encyclopedia
+
+WIKIPEDIA
+
+Automotive industry in China
+
+The automotive industry in mainland China has been the largest in the world measured by automobile unit production since 2008. As of 2024, mainland China is also the world's largest automobile market both in terms of sales and ownership.
+
+The Chinese automotive industry has seen significant developments and transformations over the years. While the period from 1949 to 1980 witnessed slow progress in the industry due to restricted competition and political instability during the Cultural Revolution, the landscape started to shift during the Chinese economic reform period, especially after the government's seventh five-year plan prioritized the domestic automobile manufacturing sector.
+
+Vehicle traffic in an expressway in Beijing
+
+Foreign investment and joint ventures played a crucial role in attracting foreign technology and capital into China. American Motors Corporation (AMC) and Volkswagen were among the early entrants, signing long-term contracts to produce vehicles in China. This led to the gradual localization of automotive components, and the strengthening of key local players such as SAIC, FAW, Dongfeng, and Changan, collectively known as the "Big Four".
+
+The entry of China into the World Trade Organization (WTO) in 2001 further accelerated the growth of the automotive industry. Tariff reductions and increased competition led to a surge in car sales, with China becoming the largest auto producer globally in 2008.[1][2] Strategic initiatives and industrial policy such as Made in China 2025 specifically prioritized electric vehicle manufacturing.
+
+In the 2020s, the automotive industry in mainland China has experienced a rise in market dominance by domestic manufacturers, with a growing focus on areas such as electric vehicle technology and advanced assisted driving systems. The domestic market size, technology, and supply chains have also led foreign carmakers to seek further partnerships with Chinese manufacturers. In 2023, China overtook Japan and became the world largest car exporter.[3] However, the industry also faced heightened scrutiny, increased tariffs and other restrictions from other countries and trade blocs, especially in the area of electric vehicles due to allegations of significant state subsidies and Chinese industrial overcapacity.[4][5]
+
+History
+
+The first automobile in China was purchased from Hong Kong in 1902 by Yuan Shikai and gifted to Empress Dowager Cixi.[6][7] It was later put on display in the Summer Palace Museum. During the early twentieth century, major western automobile manufacturers such as the Ford Motor Company, [8] General Motors, [9][10] and Mercedes-Benz[11] had plants operating in Shanghai.
+
+However, the Second Sino-Japanese War hampered the progress of the Chinese auto industry, as seen by the relocation of the Changan Automobile factory from Shanghai to Chongqing in the wake of the city's bombing and attack.[12] After the foundation of the People's Republic of China (PRC) in 1949, plants and licensed auto design were established in China with assistance from the Soviet Union in the 1950s, marking the beginning of the country's automobile sector. However, the Chinese automotive industry did not exceed 100-200 thousand automobiles produced per year during the first 30 years of the PRC. [13]
+
+China's annual automobile production capacity first exceeded one million in 1992. By 2000, China was producing over two million vehicles. [14] After China's entry into the World Trade Organization (WTO) in 2001, the development of the automobile market accelerated further. Between 2002 and 2007, China's national automobile market grew by an average 21 percent, or one million vehicles year-on-year.[15][16] In 2009, China produced 13.79 million automobiles, of which 8 million were passenger cars and 3.41 million were commercial vehicles and surpassed the United States as the world's largest automobile producer by volume. In 2010, both sales and production topped 18 million units, with 13.76 million passenger cars delivered, in each case the largest by any nation in history. [17] In 2017, total vehicle production in China reached 28.879 million, accounting for 30.19% of global automotive production. 18] In the first half of 2023, China overtook Japan to become the world's largest exporter of automobiles, exporting 2.34 million vehicles compared to 2.02 million for Japan. [19]
+
+As of 2024, China is the world's largest market both in terms of automobile sales and ownership.[20]:105
+
+Early industrialization (1928-1949)
+
+The first Chinese-built motor vehicle was a truck called the Minsheng 75 truck (###75). It was designed by Daniel F Myers, and a prototype was made at the Liao Ning Trench Mortar Arsenal, Shenyang. The prototype was completed on May 31, 1931, for Zhang Xueliang. Prior to production commencing, the factory was bombed during the Japanese invasion of Manchuria and production never commenced.[21] A fellow general, Yang Hucheng, patronized the inventor Tang Zhongming to make a new type of automobile engine powered by charcoal. In 1932 Tang founded the Chung Ming Machinery Co. Ltd. in Shanghai to produce the engines. Charcoal-powered vehicles were mainly used during the Second Sino-Japanese War because of fuel shortages.[22] Tung oil was also used during the war as a petroleum substitute.[23][24] The number of automobiles in China had been growing steadily which was close to 70,000 vehicles in 1937. However, due to the war, car ownership volume plummeted to 16,000 in 1940, which was only 23.8% of 1937. It was not until 1947 that car ownership volume returned to pre- war levels.[12]
+
+After the establishment of the People's Republic of China (1949-1980)
+
+The development of the Chinese automobile industry following the Chinese Communist Revolution was relatively slow due to the lack of free market competition and the turbulence of the Culture Revolution. Except for a degree of development in the 1950s with assistance from the Soviet Union, the Chinese automobile industry remained closed and lagging behind until the period of Chinese economic reform under Deng Xiaoping. Most domestically produced vehicles were primarily the Jiefang trucks for military or industrial departments and the Hongqi sedans used by a limited number of government officials.[25] The concept of private cars had not yet emerged in China during this period.[26]
+
+Several vehicle assembly factories were set up in the 1950s and 1960s. They were Beijing (today's Beijing Automotive Industry Holding Corporation), [27] Shanghai (today's Shanghai Automotive Industry Corporation), [28] Nanjing (later Nanjing Automobile, merged with SAIC), [29] and Jinan (evolving into China National Heavy Duty Truck Group). [30] The Second Automobile Works (later Dongfeng Motor Corporation) was founded in 1968.[31]
+
+The first Chinese production vehicles were trucks made by the First Automotive Works in 1956, called the Jiefang CA-10. [32] This was followed on March 10, 1958, by the 21/2 ton light duty truck (NJ130), which was based on the Russian GAZ-51, was produced in Nanjing. The truck was named Yuejin (meaning "leap forward") by China's First Ministry of Industrial Machinery. [25][33]
+
+In June 1958, the Nanjing Automobile, previously a vehicle servicing unit of the People's Liberation Army, began making China's first domestically produced light-duty trucks.[34] Production continued until the last truck (NJ134) rolled off the assembly line on July 9, 1987. Cumulative production was 161,988 units (including models NJ130, NJ230, NJ135, and NJ134). The first production automobiles were the Dongfeng CA71, Hongqi CA72, Feng Huang (later known as the Shanghai SH760) all from 1958. [35][36]
+
+Changan Automobile traces its origins back to 1862 when Li Hongzhang set up a military supply factory, the Shanghai Foreign Gun Bureau. It was not until 1979, when the factory was repurposed to manufacture Suzuki automobiles, that it became an automobile manufacturer. [37][38]
+
+Economic reform (1980-2000)
+
+The passenger car industry was a minor part of vehicle production during the first three decades of the People's Republic of China. As late as 1985, the country produced a total of only 5,200 cars. 39] Cars were almost entirely purchased by danweis (work units - private car ownership was virtually unknown at the time, in spite of the Sun Guiying story). [40]
+
+Impact of foreign cars
+
+As domestic production was very limited, import totals rose dramatically despite a 260 percent import duty on foreign vehicles. Before 1984, the dominant exporter of cars to China had been the Soviet Union. In 1984, Japan's vehicle exports to China increased sevenfold (from 10,800 to 85,000), and by mid-1985, China had become Japan's second biggest export
+
+Jiefang CA10, the first production vehicle of China, made by the First Automotive Works in 1956
+
+Hongqi CA72 (1959)
+
+Shanghai SH760
+
+## Pages
+
+**Page number**: 1
+**Width**: 8.25
+**Height**: 11.6806
+**Unit**: LengthUnit.INCH
+
+**Page number**: 2
+**Width**: 8.25
+**Height**: 11.6806
+**Unit**: LengthUnit.INCH
+
+## Languages
+
+**Language**: en
+**Confidence**: 0.8
+
+**Language**: en
+**Confidence**: 1.0
+
+**Language**: es
+**Confidence**: 0.7
+
+**Language**: en
+**Confidence**: 0.7
+
+**Language**: en
+**Confidence**: 0.99
+
+**Language**: en
+**Confidence**: 0.6
+
