@@ -12,9 +12,40 @@ The project focuses on developing an application with Streamlit for the user int
 
 WE ATTEST THAT WE HAVEN’T USED ANY OTHER STUDENTS’ WORK IN OUR ASSIGNMENT AND ABIDE BY THE POLICIES LISTED IN THE STUDENT HANDBOOK
 
+## Resources
+
+Application: [Streamlit Deployment](https://webpdfdataextractiontool.streamlit.app/)
+
+Bakcend API: [Google Cloud Run](https://fastapi-service-rhtrkfwlfq-uc.a.run.app)
+
+Google Codelab: [Codelab](https://codelabs-preview.appspot.com/?file_id=1xwrkjouN6SqtHA2sCEjKclfBJKb0yfX7YK_DwzOorpM#0)
+
+Video Walkthrough: [Video]()
+
+## Technologies Used
+
+- **Streamlit**: Frontend Framework
+- **FastAPI**: API Framework
+- **Google Cloud Run**: Backend Deployment
+- **AWS S3**: External Cloud Storage
+- **Scrapy**: Website Data Extraction Open Source Tool
+- **PyMuPDF**: PDF Data Extraction Open Source Tool
+- **Diffbot**: Website Data Extraction Enterprise Tool
+- **Microsoft Document Intelligence**: PDF Data Extraction Enterprise Tool
+- **Docling**: Document Data Extraction Tool
+
 ## Application Workflow Diagram
 
 ![Application Workflow Diagram](data_extractor.png)
+
+### Workflow
+1. **User submits a request** via the Streamlit UI.
+2. **Frontend forwards the request** to the respective API:
+   - **Web Processing API** for URLs.
+   - **PDF Processing API** for document uploads.
+3. **Backend processes the request** using appropriate tools.
+4. **Processed data is stored** in Amazon S3.
+5. **The user receives extracted content** back in the UI.
 
 ## Environment Setup
 
@@ -76,7 +107,7 @@ pip install -r requirements.txt
 - Run `gcloud --version` to confirm installation.
 - Use `gcloud config list` to check the active configuration.
 
-### 5. Setting up the Docker Image
+### 5. Setting up the Docker Image on Google Cloud Run
 
 1. **Build the Docker Image**
 
@@ -130,6 +161,34 @@ gcloud run services describe fastapi-service \
 gcloud run services logs read fastapi-service --region <REGION>
 ```
 
+## Data Flow & Backend Processes
+
+### 1. User Input
+The user provides input via:
+- A **Web URL Input** for extracting content from websites.
+- A **PDF File Upload** for extracting text and data from PDFs.
+
+### 2. Frontend (Streamlit)
+- The **Streamlit UI** acts as the interface where users enter URLs or upload PDFs.
+- This UI sends requests to the **Backend (FastAPI)** for processing.
+
+### 3. Backend (FastAPI)
+The **FastAPI service** is responsible for handling requests separately for:
+- **Web Processing API** – Handles web scraping and content extraction from URLs.
+- **PDF Processing API** – Extracts text and structured data from uploaded PDFs.
+
+### 4. Processing Components
+The FastAPI service interacts with multiple tools for processing:
+- **Open Source Tool** – Provides additional processing features for both Web and PDF content.
+- **Enterprise Tool** – Enhances text extraction and analysis.
+- **Docling Tool** – Extracts structured content from PDFs.
+
+### 5. Deployment & Execution
+- The backend runs on **Google Cloud Run**, packaged as a **Docker Image**.
+- Requests are processed in a cloud-based environment for scalability.
+
+### 6. Data Storage & Output
+- Extracted data is stored in **Amazon S3**, ensuring persistence and easy retrieval.
 
 ## References
 
