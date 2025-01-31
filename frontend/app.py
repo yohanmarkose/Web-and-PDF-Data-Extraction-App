@@ -12,37 +12,44 @@ def main():
     st.sidebar.header("Main Menu")
     input_format = st.sidebar.selectbox("Choose a format:", ["WebURL", "PDF"])
     
+    if "text_url" not in st.session_state:
+        st.session_state.text_url = ""
+    if "file_upload" not in st.session_state:
+        st.session_state.file_upload = None
+
     if input_format == "WebURL":
+        st.session_state.file_upload = None
         tool = st.sidebar.selectbox("Choose a method to convert URL:", 
-                                    ["Scrapy (OS)", "Diffbot (Enterprise)", "Docling"])
-        text_url = st.text_input("Enter URL here")
+                                    ["BeautifulSoup (OS)", "Diffbot (Enterprise)", "Docling"])
+        st.session_state.text_url = st.text_input("Enter URL here")
         convert = st.button("Convert", use_container_width=True)
     elif input_format == "PDF":
+        st.session_state.text_url = ""
         tool = st.sidebar.selectbox("Choose a method to convert PDF:", 
                                     ["PyMuPDF (OS)", "Azure Document Intelligence (Enterprise)", "Docling"])           
         if tool == "Azure Document Intelligence (Enterprise)":
             radio = st.radio("Choose a model :", ["Read", "Layout"])
         else:
             radio = None
-        file_upload = st.file_uploader("Choose a PDF File", type="pdf", accept_multiple_files=False)    
+        st.session_state.file_upload = st.file_uploader("Choose a PDF File", type="pdf", accept_multiple_files=False)    
         convert = st.button("Convert", use_container_width=True)
         
     # Define what happens on each page
     if convert:
         if input_format == "WebURL":
-            if text_url:
-                if check_url(text_url):
-                    st.success(f"The URL '{text_url}' exists and is accessible!")
-                    convert_web_to_markdown(tool, text_url)
+            if st.session_state.text_url:
+                if check_url(st.session_state.text_url):
+                    st.success(f"The URL '{st.session_state.text_url}' exists and is accessible!")
+                    convert_web_to_markdown(tool, st.session_state.text_url)
                 else:
-                    st.error(f"The URL '{text_url}' does not exist or is not accessible.")
+                    st.error(f"The URL '{st.session_state.text_url}' does not exist or is not accessible.")
             else:
                 st.info("Please enter a URL.")
     
         elif input_format == "PDF":
-            if file_upload:
-                st.success(f"File '{file_upload.name}' uploaded successfully!")
-                convert_PDF_to_markdown(tool, file_upload,radio)
+            if st.session_state.file_upload:
+                st.success(f"File '{st.session_state.file_upload.name}' uploaded successfully!")
+                convert_PDF_to_markdown(tool, st.session_state.file_upload, radio)
             else:
                 st.info("Please upload a PDF file.")
             
@@ -61,11 +68,10 @@ def convert_web_to_markdown(tool, text_url):
     progress_text = st.empty()  
     
     progress_text.text("Starting conversion...")
-    time.sleep(0.5)
     progress_bar.progress(25)
 
-    if tool == "Scrapy (OS)":
-        response = requests.post(f"{API_URL}/scrape_url_os_scrapy", json={"url": text_url})
+    if tool == "BeautifulSoup (OS)":
+        response = requests.post(f"{API_URL}/scrape_url_os_bs", json={"url": text_url})
     elif tool == "Diffbot (Enterprise)":
         response = requests.post(f"{API_URL}/scrape_diffbot_en_url", json={"url": text_url})
     elif tool == "Docling":
@@ -74,19 +80,20 @@ def convert_web_to_markdown(tool, text_url):
     progress_text.text("Processing request...")
     progress_bar.progress(50)
     
-    if response.status_code == 200:
-        data = response.json()
-        progress_text.text("Finalizing output...")
-        progress_bar.progress(75)
-        time.sleep(0.5)
-        
-        st.success("Conversion successful!")
-        st.markdown(data["scraped_content"], unsafe_allow_html=True)
-    else:
-        st.error("An error occurred while processing.")
+    try:
+        if response.status_code == 200:
+            data = response.json()
+            progress_text.text("Finalizing output...")
+            progress_bar.progress(75)
+            st.success("Conversion successful!")
+            st.subheader(data["message"])
+            st.markdown(data["scraped_content"], unsafe_allow_html=True)
+        else:
+            st.error("Server not responding.")
+    except:
+        st.error("An error occurred while processing the url")
     
     progress_bar.progress(100)
-    time.sleep(0.5)
     progress_bar.empty()
         
 def convert_PDF_to_markdown(tool, file_upload, radio):    
@@ -94,7 +101,6 @@ def convert_PDF_to_markdown(tool, file_upload, radio):
     progress_text = st.empty()
     
     progress_text.text("Uploading file...")
-    time.sleep(0.5)
     progress_bar.progress(20)
 
     if file_upload is not None:
@@ -104,7 +110,7 @@ def convert_PDF_to_markdown(tool, file_upload, radio):
         progress_text.text("Sending file for processing...")
         progress_bar.progress(50)
         
-        if tool == "Open Source - PyMuPDF":
+        if tool == "PyMuPDF (OS)":
             response = requests.post(f"{API_URL}/scrape_pdf_os", json={"file": base64_pdf, "file_name": file_upload.name, "model": ""})
         elif tool == "Azure Document Intelligence (Enterprise)":
             model = "read" if radio == "Read" else "layout"
@@ -115,18 +121,19 @@ def convert_PDF_to_markdown(tool, file_upload, radio):
         progress_text.text("Processing document...")
         progress_bar.progress(75)
         
-        if response.status_code == 200:
-            data = response.json()
-            progress_text.text("Finalizing output...")
-            time.sleep(0.5)
-            
-            st.success("PDF conversion successful!")
-            st.markdown(data["scraped_content"], unsafe_allow_html=True)
-        else:
+        try:
+            if response.status_code == 200:
+                data = response.json()
+                progress_text.text("Finalizing output...")
+                st.success("PDF conversion successful!")
+                st.subheader(data["message"])
+                st.markdown(data["scraped_content"], unsafe_allow_html=True)
+            else:
+                st.error("Server not responding.")
+        except:
             st.error("An error occurred while processing the PDF.")
     
     progress_bar.progress(100)
-    time.sleep(0.5)
     progress_bar.empty()        
     
 if __name__ == "__main__":

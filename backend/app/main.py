@@ -1,49 +1,45 @@
 from fastapi import FastAPI, UploadFile, Form, File
+from fastapi.responses import JSONResponse, FileResponse
 from pydantic import BaseModel
+
+from io import BytesIO
+import os
+from dotenv import load_dotenv
+import re
+from datetime import datetime
+import base64
+from datetime import datetime
+
+# Docling imports
 import requests
 from bs4 import BeautifulSoup
 
-import os
-from features.web_extraction.os_url_extractor import WikiSpider, scrape_url, convert_json_to_markdown, convert_table_to_markdown
-
-from features.web_extraction.os_url_extractor import WikiSpider, scrape_url 
-
-from fastapi.responses import JSONResponse, FileResponse
 from features.pdf_extraction.docling_pdf_extractor import pdf_docling_converter
 from features.web_extraction.docling_url_extractor import url_docling_converter
 from features.pdf_extraction.os_pdf_extraction import pdf_os_converter
 from features.pdf_extraction.docling_pdf_extractor import pdf_docling_converter
 from features.web_extraction.docling_url_extractor import url_docling_converter
 
-from io import BytesIO
-
-import re
-from datetime import datetime
-
-import base64
-
-from dotenv import load_dotenv
-load_dotenv()
+# OS we extraction imports
+from features.web_extraction import os_url_extractor_bs
 
 #Diffbot imports
 from features.web_extraction.diffbot_python_client.diffbot_client import DiffbotClient,DiffbotCrawl,DiffbotSpecificExtraction
-import pprint
-import time
-from datetime import datetime
+# import pprint
+# import time
 import ast
 
 # Aure AI imports
 from features.pdf_extraction.azure_ai_intelligent_doc.read_azure_ai_model import read_azure_ai_model
-import base64
-from io import BytesIO
 
-# Read values
-AWS_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
 # from services import s3
 from services.s3 import S3FileManager
 
-app = FastAPI()
+load_dotenv()
+AWS_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
+DIFFTBOT_API_TOKEN = os.getenv("DIFFBOT_API_TOKEN") 
 
+app = FastAPI()
 class URLInput(BaseModel):
     url: str
 class PdfInput(BaseModel):
@@ -51,22 +47,21 @@ class PdfInput(BaseModel):
     file_name: str
     model: str
 
-# OS web - scrapy
-@app.post("/scrape_url_os_scrapy")
+@app.post("/scrape_url_os_bs")
 def process_url(url_input: URLInput):
-    json_result = scrape_url(url_input.url)
+    md_result = os_url_extractor_bs.scrape_to_markdown(url_input.url)
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
     folder_name = url_to_folder_name(url_input.url)
     base_path = f"web/os/{folder_name}_{timestamp}/"
     s3_obj = S3FileManager(AWS_BUCKET_NAME, base_path)
     s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/web_url.txt", str(url_input.url))
 
-    md_result = convert_json_to_markdown(json_result) # Scrape the URL
+    # md_result = convert_json_to_markdown(json_result) # Scrape the URL
     s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/extracted_data.md", str(md_result))
 
     return {
         "message": f"Data Scraped and stored in https://{s3_obj.bucket_name}.s3.amazonaws.com/{s3_obj.base_path}/extracted_data.md",
-        "scraped_content": md_result  # Include the original scraped content in the response
+        "scraped_content": md_result
     }
 
 # OS PDF - Pymupdf
@@ -81,8 +76,8 @@ def process_pdf_os(uploaded_pdf: PdfInput):
     s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{uploaded_pdf.file_name}", pdf_content)
     file_name, result = pdf_os_converter(pdf_stream, base_path, s3_obj)
     return {
-        "message": f"File {file_name} ",
-        "scraped_content": result  # Include the original scraped content in the response
+        "message": f"Data Scraped and stored in https://{s3_obj.bucket_name}.s3.amazonaws.com/{file_name}",
+        "scraped_content": result
     }
 
 # Os web Docling  
@@ -122,23 +117,6 @@ def process_pdf_docling(uploaded_pdf: PdfInput):
         "message": f"File {file_name} ",
         "scraped_content": result  # Include the original scraped content in the response
     }
-
-def url_to_folder_name(url):
-    # Extract the main domain
-    match = re.search(r"https?://(?:www\.)?([^/]+)", url)
-    if match:
-        domain = match.group(1).replace("www.", "")
-    else:
-        return None
-    safe_folder_name = re.sub(r"[^a-zA-Z0-9_\-]", "_", domain)
-    
-    return safe_folder_name
-
-
-## Enterprise - Web Scraping (Diffbot)
-import os
-
-DIFFTBOT_API_TOKEN = os.getenv("DIFFBOT_API_TOKEN") 
 
 @app.post("/scrape_diffbot_en_url")
 def diffbot_process_url(url_input: URLInput):
@@ -185,6 +163,39 @@ def diffbot_process_url(url_input: URLInput):
         "scraped_content": markdown_content  
     }
 
+
+@app.post("/azure-intdoc-process-pdf")
+async def azure_int_doc_process_pdf(uploaded_pdf: PdfInput):
+    try :
+        pdf_content = base64.b64decode(uploaded_pdf.file)
+        pdf_stream = BytesIO(pdf_content)
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        base_path = f"pdf/ent/{uploaded_pdf.file_name.replace('.', '')}_{timestamp}/"
+        s3_obj = S3FileManager(AWS_BUCKET_NAME, base_path)
+        s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{uploaded_pdf.file_name}", pdf_content)
+        result = read_azure_ai_model(pdf_stream,uploaded_pdf.model)
+        s3_obj = S3FileManager(AWS_BUCKET_NAME, base_path)
+        s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{uploaded_pdf.model}/{uploaded_pdf.file_name}/extracted_data.md", result)
+        return {
+            "message": f"File scanned with {uploaded_pdf.model} model",
+            "scraped_content": result
+        }
+        
+    except Exception as e:
+        print(f"Error processing PDF: {e}")
+        return { "error" : f"Error processing PDF: {e}"}
+
+# To get url domain name from url
+def url_to_folder_name(url):
+    # Extract the main domain
+    match = re.search(r"https?://(?:www\.)?([^/]+)", url)
+    if match:
+        domain = match.group(1).replace("www.", "")
+    else:
+        return None
+    safe_folder_name = re.sub(r"[^a-zA-Z0-9_\-]", "_", domain)
+    return safe_folder_name
+
 def extract_for_markdownrender(data):
     extracted_data = []
     for obj in data:
@@ -210,24 +221,3 @@ def extract_for_markdownrender(data):
             "images": image_data
         })
     return extracted_data
-
-@app.post("/azure-intdoc-process-pdf")
-async def azure_int_doc_process_pdf(uploaded_pdf: PdfInput):
-    try :
-        pdf_content = base64.b64decode(uploaded_pdf.file)
-        pdf_stream = BytesIO(pdf_content)
-        timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        base_path = f"pdf/ent/{uploaded_pdf.file_name.replace('.', '')}_{timestamp}/"
-        s3_obj = S3FileManager(AWS_BUCKET_NAME, base_path)
-        s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{uploaded_pdf.file_name}", pdf_content)
-        result = read_azure_ai_model(pdf_stream,uploaded_pdf.model)
-        s3_obj = S3FileManager(AWS_BUCKET_NAME, base_path)
-        s3_obj.upload_file(AWS_BUCKET_NAME, f"{s3_obj.base_path}/{uploaded_pdf.model}/{uploaded_pdf.file_name}/extracted_data.md", result)
-        return {
-            "message": f"File scanned with {uploaded_pdf.model} model",
-            "scraped_content": result
-        }
-        
-    except Exception as e:
-        print(f"Error processing PDF: {e}")
-        return { "error" : f"Error processing PDF: {e}"}
