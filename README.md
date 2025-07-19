@@ -2,15 +2,10 @@
 
 The project focuses on developing an application with Streamlit for the user interface and FastAPI for API endpoints, utilizing a Python backend. It processes website URLs and PDF files to extract structured data, including text, images, and tables, using various parsing techniques. The extracted data is securely stored in an AWS S3 bucket and rendered in the Streamlit UI using a markdown-standardized format for consistency. The implementation integrates open-source libraries and enterprise tools, alongside document-linguistic approaches, to evaluate tool compatibility and performance. This prototype serves as a scalable framework for testing and validating data extraction capabilities across diverse input formats.
 
-## Team Members
 
-- Vedant Mane
-- Abhinav Gangurde
-- Yohan Markose
+## Application Workflow Diagram
 
-## Attestation:
-
-WE ATTEST THAT WE HAVEN’T USED ANY OTHER STUDENTS’ WORK IN OUR ASSIGNMENT AND ABIDE BY THE POLICIES LISTED IN THE STUDENT HANDBOOK
+![Application Workflow Diagram](data_extractor.png)
 
 ## Resources
 
@@ -36,9 +31,6 @@ Video Walkthrough: [Video](https://drive.google.com/file/d/1gRAybJijrtRXynX8-bh1
 - **Microsoft Document Intelligence**: PDF Data Extraction Enterprise Tool
 - **Docling**: Document Data Extraction Tool
 
-## Application Workflow Diagram
-
-![Application Workflow Diagram](data_extractor.png)
 
 ### Workflow
 1. **User submits a request** via the Streamlit UI.
